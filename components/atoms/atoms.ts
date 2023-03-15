@@ -17,7 +17,17 @@ export const MenuTrayItem = atom({
   default: "",
 });
 
+export const CartTray = atom({
+  key: `${COMPONENT_NAME}/CartTray`,
+  default: false,
+});
+
 export const NewNotif = atom({
   key: `${COMPONENT_NAME}/NewNotif`,
-  default: ['Consulting'],
+  default: ['Consulting', 'Cart'],
+});
+
+export const CartValue = atom({
+  key: `${COMPONENT_NAME}/CartValue`,
+  default: ['Consulting', 'Cart'],
 });

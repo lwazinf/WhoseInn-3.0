@@ -21,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import {
+  CartTray,
   MenuHoverItem,
   MenuTray,
   MenuTrayItem,
@@ -35,6 +36,7 @@ interface MainMenu_Props {}
 const MainMenu_ = ({}: MainMenu_Props) => {
   const [mHI_, setMHI_] = useRecoilState(MenuHoverItem);
   const [mT_, setMT_] = useRecoilState(MenuTray);
+  const [cT_, setCT_] = useRecoilState(CartTray);
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
   const [nN_, setNN_] = useRecoilState(NewNotif);
 
@@ -71,6 +73,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
               setMTI_("");
             } else {
               setMT_(true);
+              setCT_(false);
               setMTI_("Logistics");
             }
           }}
@@ -97,6 +100,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
               setMTI_("");
             } else {
               setMT_(true);
+              setCT_(false);
               setMTI_("Equipment");
             }
           }}
@@ -123,6 +127,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
               setMTI_("");
             } else {
               setMT_(true);
+              setCT_(false);
               setMTI_("Material");
             }
           }}
@@ -149,6 +154,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
               setMTI_("");
             } else {
               setMT_(true);
+              setCT_(false);
               setMTI_("Consulting");
             }
           }}
@@ -160,6 +166,33 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
           {nN_.includes("Consulting" as never) ? <NewNotif_ /> : <div />}
+        </div>
+        <div
+          className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
+          onMouseLeave={() => {
+            setMHI_("");
+          }}
+          onMouseEnter={() => {
+            setMHI_("Cart");
+          }}
+          onClick={() => {
+            if (mTI_ == "Cart") {
+              setCT_(false);
+            setMTI_("");
+            } else {
+              setCT_(true);
+              setMT_(false);
+              setMTI_("Cart");
+            }
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faCartShopping}
+            className={`h-[25px] w-[25px] ${
+              mTI_ == "Cart" ? "text-black/60" : "text-black/30"
+            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+          />
+          {nN_.includes("Cart" as never) ? <NewNotif_ /> : <div />}
         </div>
 
         <div className={`w-[50px] h-[1px] bg-black/20 my-4`} />

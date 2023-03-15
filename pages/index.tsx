@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
-        <title>WhoseInn Network</title>
+        <title>WhoseInn Mining</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
