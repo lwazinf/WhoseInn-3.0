@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { MenuTray, MenuTrayItem } from "./atoms/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Consulting_, Material_ } from "./Selections_"
+import { Consulting_, Material_, Options_ } from "./Selections_"
 
 interface SecondMenu_Props {}
 
@@ -89,7 +89,7 @@ const SecondMenu_ = ({}: SecondMenu_Props) => {
           className={`w-full h-full flex flex-col justify-start items-center px-[20px]`}
         >
           <div className={`w-[200px] h-[1px] bg-black/20 mb-2`} />
-          {mTI_ == 'Consulting' ? <Consulting_/> : mTI_ == 'Material' ? <Material_/> : <div></div>}
+          {mTI_ == 'Consulting' ? <Consulting_/> : mTI_ == 'Materials' ? <Options_ option={`materials`}/> : mTI_ == 'Logistics' ? <Options_ option={`logistics`}/> : mTI_ == 'Equipment' ? <Options_ option={`equipment`}/> : <div></div>}
       </div>
       </div>
     </div>

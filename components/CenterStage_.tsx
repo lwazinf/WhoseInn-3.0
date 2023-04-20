@@ -94,10 +94,10 @@ const CenterStage_ = ({}: CenterStage_Props) => {
           return (
             <div
               className={`w-[350px] min-h-[250px] flex flex-col justify-center items-center`}
+              key={obj_.id}
             >
               <div
                 className={`w-[350px] h-[250px] flex flex-col justify-center items-center relative overflow-hidden rounded-[3px] bg-white/80 hover:bg-white backdrop-blur-lg transition-all duration-100 cursor-pointer`}
-                key={obj_.id}
               >
                 <img
                   src={obj_.image}
@@ -118,9 +118,11 @@ const CenterStage_ = ({}: CenterStage_Props) => {
           );
         })}
       </div>
-      <div className={`w-[1200px] flex flex-col justify-center items-center relative`}>
-        <img src={`/assets/images/N4CF.png`} className={`w-[600px] object-cover m my-[-100px]`}/>
-        <img src={`/assets/images/MSH.png`} className={`w-[550px] object-cover`}/>
+      <div className={`w-[1200px] flex flex-row justify-center items-center relative`}>
+      <div className={`w-[400px] h-full bg-blue-100 flex flex-row justify-center items-center relative`}>
+        <img src={`/assets/images/MSH.png`} className={`w-[500px] absolute top-0 left-0 object-contain`}/>
+        </div>
+        <img src={`/assets/images/N4CF.png`} className={`w-[600px] object-cover ml-[-50px] my-[-100px]`}/>
       </div>
     </div>
   );

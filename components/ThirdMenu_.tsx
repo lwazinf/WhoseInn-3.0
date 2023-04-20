@@ -10,7 +10,7 @@ const ThirdMenu_ = ({}: ThirdMenu_Props) => {
     <div
       className={`flex flex-col fixed ${
         cT_ ? "right-[0px]" : "right-[-500px]"
-      } top-0 w-[350px] h-full justify-start items-center bg-white/40 backdrop-blur-lg shadow-md transition-all duration-300`}
+      } top-0 w-[400px] h-full justify-start items-center bg-white/40 backdrop-blur-lg shadow-md transition-all duration-300`}
     >
       <div
         className={`flex flex-col w-full h-full justify-start items-center relative`}

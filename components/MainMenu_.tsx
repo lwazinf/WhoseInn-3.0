@@ -4,31 +4,24 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import {
-  faAngleRight,
   faBrush,
-  faCartPlus,
   faCartShopping,
   faComments,
-  faGears,
-  faInfoCircle,
-  faMessage,
-  faParachuteBox,
-  faPerson,
-  faShop,
   faTractor,
-  faUser,
   faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import {
   CartTray,
+  CartValue,
   MenuHoverItem,
   MenuTray,
   MenuTrayItem,
   NewNotif,
+  StoreDP,
 } from "../components/atoms/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NewNotif_ from "./NewNotif_";
+import NewNotif_, { NewNotifAlt_ } from "./NewNotif_";
 import Branding_ from "./Branding_";
 
 interface MainMenu_Props {}
@@ -37,8 +30,10 @@ const MainMenu_ = ({}: MainMenu_Props) => {
   const [mHI_, setMHI_] = useRecoilState(MenuHoverItem);
   const [mT_, setMT_] = useRecoilState(MenuTray);
   const [cT_, setCT_] = useRecoilState(CartTray);
+  const [cV_, setCV_] = useRecoilState(CartValue);
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
   const [nN_, setNN_] = useRecoilState(NewNotif);
+  const [dP_, setDP_] = useRecoilState(StoreDP);
 
   return (
     <div
@@ -51,7 +46,8 @@ const MainMenu_ = ({}: MainMenu_Props) => {
         <div
           className={`flex flex-col w-full h-full justify-center items-center bg-black/50 rounded-[4px] cursor-pointer`}
           onClick={() => {
-            setMT_(!mT_);
+            setMTI_("");
+            setMT_(false);
           }}
         ></div>
       </div>
@@ -69,11 +65,9 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {
             if (mTI_ == "Logistics") {
-              setMT_(false);
-              setMTI_("");
+              setMT_(!mT_);
             } else {
               setMT_(true);
-              setCT_(false);
               setMTI_("Logistics");
             }
           }}
@@ -96,12 +90,10 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {
             if (mTI_ == "Equipment") {
-              setMT_(false);
-              setMTI_("");
+              setMT_(!mT_);
             } else {
-              setMT_(true);
-              setCT_(false);
               setMTI_("Equipment");
+              setMT_(true);
             }
           }}
         >
@@ -119,26 +111,24 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Material");
+            setMHI_("Materials");
           }}
           onClick={() => {
-            if (mTI_ == "Material") {
-              setMT_(false);
-              setMTI_("");
+            if (mTI_ == "Materials") {
+              setMT_(!mT_);
             } else {
               setMT_(true);
-              setCT_(false);
-              setMTI_("Material");
+              setMTI_("Materials");
             }
           }}
         >
           <FontAwesomeIcon
             icon={faBrush}
             className={`h-[25px] w-[25px] ${
-              mTI_ == "Material" ? "text-black/60" : "text-black/30"
+              mTI_ == "Materials" ? "text-black/60" : "text-black/30"
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
-          {nN_.includes("Material" as never) ? <NewNotif_ /> : <div />}
+          {nN_.includes("Materials" as never) ? <NewNotif_ /> : <div />}
         </div>
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
@@ -150,11 +140,9 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {
             if (mTI_ == "Consulting") {
-              setMT_(false);
-              setMTI_("");
+              setMT_(!mT_);
             } else {
               setMT_(true);
-              setCT_(false);
               setMTI_("Consulting");
             }
           }}
@@ -176,23 +164,20 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("Cart");
           }}
           onClick={() => {
-            if (mTI_ == "Cart") {
-              setCT_(false);
-            setMTI_("");
-            } else {
-              setCT_(true);
-              setMT_(false);
-              setMTI_("Cart");
-            }
+            setCT_(!cT_);
           }}
         >
           <FontAwesomeIcon
             icon={faCartShopping}
             className={`h-[25px] w-[25px] ${
-              mTI_ == "Cart" ? "text-black/60" : "text-black/30"
-            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+              cT_ ? "text-black/60 animate-pulse" : "text-black/30"
+            } ${
+              dP_
+                ? "opacity-50 pointer-events-none cursor-wait"
+                : "opacity-100 pointer-events-auto"
+            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}            
           />
-          {nN_.includes("Cart" as never) ? <NewNotif_ /> : <div />}
+          {cV_.length > 0 ? <NewNotifAlt_ /> : <div />}
         </div>
 
         <div className={`w-[50px] h-[1px] bg-black/20 my-4`} />

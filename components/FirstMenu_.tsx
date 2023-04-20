@@ -7,7 +7,7 @@ const FirstMenu_ = ({}: FirstMenu_Props) => {
   return (
     <div className={`flex w-full h-screen flex-col items-start justify-center`}>
       <MainMenu_ />
-      <NavNotif_ bPad={`pb-[175px]`} data={["Logistics", "Equipment", "Material", "Consulting", "Cart"]} />
+      <NavNotif_ bPad={`pb-[175px]`} data={["Logistics", "Equipment", "Materials", "Consulting", "Cart"]} />
       <NavNotif_ bPad={`pb-6`} data={["Facebook", "Twitter", "Instagram"]} />
     </div>
   );
