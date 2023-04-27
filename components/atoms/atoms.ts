@@ -44,10 +44,10 @@ export const StoreDP = atom({
 
 export const NewNotif = atom({
   key: `${COMPONENT_NAME}/NewNotif`,
-  default: ['Consulting', 'Cart'],
+  default: [],
 });
 
 export const CartValue = atom({
   key: `${COMPONENT_NAME}/CartValue`,
-  default: [1, 2, 3],
+  default: [],
 });

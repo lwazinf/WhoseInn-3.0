@@ -4,8 +4,7 @@ import SideMenu_ from "../components/SideMenu_";
 import CenterStage_ from "../components/CenterStage_";
 import { useRecoilState } from "recoil";
 import { MenuItem, MenuTrayItem } from "../components/atoms/atoms";
-import Messages_ from "../components/Messages_";
-import Products_ from "../components/Products_";
+import Storage_ from "../components/Storage_";
 import { getOptions } from "../Firebase";
 import { useEffect } from "react";
 import Modal_ from "../components/Modal_";
@@ -26,17 +25,15 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
-        <title>WhoseInn Mining</title>
+        <title>Of Script - Create and share your portfolio</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full min-h-[20px] flex-col items-center justify-center text-center relative overflow-scroll">
+      <main className="flex w-full pl-[100px] min-h-[20px] flex-col items-center justify-center text-center relative overflow-scroll">
         {mTI_ == "" ? (
           <CenterStage_ />
-        ) : mTI_ == "Consulting" ? (
-          <Messages_ />
-        ) : mTI_ == "Materials" ? (
-          <Products_ />
+        ) : mTI_ == "Storage" ? (
+          <Storage_ />
         ) : (
           <div className={``} />
         )}

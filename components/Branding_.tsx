@@ -1,27 +1,64 @@
+import { useRecoilState } from "recoil";
+import { MenuTray, MenuTrayItem } from "./atoms/atoms";
+import { useState } from "react";
+
 interface Branding_Props {
-    customStyle: string
+  customStyle: string;
 }
 
-const Branding_ = ({customStyle}: Branding_Props) => {
+const Branding_ = ({ customStyle }: Branding_Props) => {
+  const [mT_, setMT_] = useRecoilState(MenuTray);
+  const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
+  const [pulse_, setPulse_] = useState(false)
   return (
     <div
-      className={`flex flex-col justify-start items-center h-full w-full pt-[130px] hover:pt-[133px] pr-[20px] opacity-50 hover:opacity-100 transition-all duration-[1000ms] hover:duration-200 ${customStyle}`}
+      className={`flex flex-col justify-start items-center h-[320px] w-full pt-[190px] hover:pt-[195px] opacity-60 hover:opacity-100 transition-all duration-[1000ms] hover:duration-200 ${customStyle}`}
+      onMouseEnter={() => {
+        setPulse_(true)
+      }}
+      onMouseLeave={() => {
+        setPulse_(false)
+      }}
     >
-      <p
-        className={`._inter min-h-0 font-black text-[40px] p-0 m-0 relative cursor-default text-black/50 transition-all duration-500 -rotate-90`}
+      <div
+        className={`flex flex-col w-full h-[100px] justify-center items-center absolute top-6 p-4`}
       >
-        INN
-      </p>
-      <p
-        className={`._inter min-h-0 font-medium text-[40px] p-0 m-0 relative bottom-[-50px] cursor-default text-black/20 transition-all duration-500 -rotate-90`}
+        <div
+          className={`flex flex-col w-full h-full justify-center items-center opacity-[0.65] rounded-[4px] cursor-pointer`}
+          onClick={() => {
+            setMTI_("");
+            setMT_(false);
+          }}
+        >
+          <img src={`/assets/images/LwaziNF.png`} className={`w-full object-cover`}/>
+        </div>
+      </div>
+      <div
+        className={`flex flex-col justify-center items-start min-w-2 h-[52px] -rotate-90 pointer-events-none`}
       >
-        WHOSE
-      </p>
-      <p
-        className={`._inter min-h-0 font-medium text-[20px] p-0 m-0 relative bottom-[114px] left-[30px] cursor-default text-black/20 transition-all duration-500 -rotate-90`}
-      >
-        .COM
-      </p>
+        <div
+          className={`flex flex-row justify-end items-start min-w-2 min-h-2`}
+        >
+          <p
+            className={`._inter min-h-0 font-medium text-[32px] p-0 m-0 relative cursor-default text-black/20 transition-all duration-500`}
+          >
+            OF
+          </p>
+          <div className={`h-full flex flex-col justify-center items-center mx-[5px]`}>
+          <p
+            className={`._inter min-h-0 font-medium text-[12px] px-1 m-0 relative cursor-default text-white transition-all duration-500 rounded-[2px] bg-red-500 rotate-90 animate-pulse`}
+          >
+            AI
+          </p>
+          </div>
+          <p
+            className={`._inter min-h-0 font-black text-[32px] p-0 m-0 relative cursor-default text-black/50 transition-all duration-500`}
+          >
+            SCRIPT
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 };

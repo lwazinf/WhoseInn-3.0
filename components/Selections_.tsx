@@ -1,12 +1,12 @@
-// // // // // // // Consulting
+// // // // // // // Archive
 
 import { useRecoilState } from "recoil";
 import { MenuItem, MenuTray, StoreDP, CurrentID, TagInfo, CartTray } from "./atoms/atoms";
 import { useEffect } from "react";
 
-interface Consulting_Props {}
+interface Archive_Props {}
 
-export const Consulting_ = ({}: Consulting_Props) => {
+export const Archive_ = ({}: Archive_Props) => {
   return (
     <div className={`w-full h-full flex flex-col justify-start items-center`}>
       <div
@@ -51,7 +51,9 @@ export const Options_ = ({ option }: OptionsProps) => {
       } transition-all duration-[400ms]`}
     >
       {/* Use menuItems here instead of mI_[option] */}
-      {mI_[option].map((obj_) => {
+      {
+      // @ts-ignore
+      mI_[option].map((obj_) => {
         return (
           <div
             key={obj_.id} // add a unique key prop for each item in the map
@@ -60,6 +62,7 @@ export const Options_ = ({ option }: OptionsProps) => {
                 setCT_(false)
               setDP_(true);
               setCID_(obj_.id)
+              // @ts-ignore
               setTI_(mI_[option].filter((obj__) => {
                 return obj__.id == obj_.id
               })[0])}

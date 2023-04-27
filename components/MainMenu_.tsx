@@ -6,7 +6,11 @@ import {
 import {
   faBrush,
   faCartShopping,
+  faCommenting,
   faComments,
+  faFileArrowDown,
+  faPeopleGroup,
+  faPerson,
   faTractor,
   faWrench,
 } from "@fortawesome/free-solid-svg-icons";
@@ -39,71 +43,35 @@ const MainMenu_ = ({}: MainMenu_Props) => {
     <div
       className={`flex flex-col w-[100px] h-full justify-center items-center relative bg-white shadow-md`}
     >
-      <Branding_ customStyle={`absolute top-0`}/>
-      <div
-        className={`flex flex-col w-full h-[100px] justify-center items-center absolute top-6 p-4`}
-      >
-        <div
-          className={`flex flex-col w-full h-full justify-center items-center bg-black/50 rounded-[4px] cursor-pointer`}
-          onClick={() => {
-            setMTI_("");
-            setMT_(false);
-          }}
-        ></div>
-      </div>
-      
+      <Branding_ customStyle={`absolute top-0`} />
+
       <div
         className={`flex flex-col w-full min-h-[30px] justify-center items-center absolute bottom-6`}
       >
         <div
-          className={`min-h-[20px] min-w-[20px] m-2 relative flex justify-center items-center`}
-          onMouseLeave={() => {
-            setMHI_("");
-          }}
-          onMouseEnter={() => {
-            setMHI_("Logistics");
-          }}
-          onClick={() => {
-            if (mTI_ == "Logistics") {
-              setMT_(!mT_);
-            } else {
-              setMT_(true);
-              setMTI_("Logistics");
-            }
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faTractor}
-            className={`h-[25px] w-[25px] ${
-              mTI_ == "Logistics" ? "text-black/60" : "text-black/30"
-            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
-          />
-          {nN_.includes("Logistics" as never) ? <NewNotif_ /> : <div />}
-        </div>
-        <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
           onMouseLeave={() => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Equipment");
+            setMHI_("Script");
           }}
           onClick={() => {
-            if (mTI_ == "Equipment") {
+            if (mTI_ == "Script") {
               setMT_(!mT_);
             } else {
-              setMTI_("Equipment");
+              setMTI_("Script");
               setMT_(true);
             }
           }}
         >
           <FontAwesomeIcon
-            icon={faWrench}
+            icon={faPerson}
             className={`h-[22px] w-[22px] ${
-              mTI_ == "Equipment" ? "text-black/60" : "text-black/30"
+              mTI_ == "Script" ? "text-black/60" : "text-black/30"
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
-          {nN_.includes("Equipment" as never) ? <NewNotif_ /> : <div />}
+          {nN_.includes("Script" as never) ? <NewNotif_ /> : <div />}
         </div>
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
@@ -111,24 +79,24 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Materials");
+            setMHI_("Scripts");
           }}
           onClick={() => {
-            if (mTI_ == "Materials") {
+            if (mTI_ == "Scripts") {
               setMT_(!mT_);
             } else {
               setMT_(true);
-              setMTI_("Materials");
+              setMTI_("Scripts");
             }
           }}
         >
           <FontAwesomeIcon
-            icon={faBrush}
+            icon={faPeopleGroup}
             className={`h-[25px] w-[25px] ${
-              mTI_ == "Materials" ? "text-black/60" : "text-black/30"
+              mTI_ == "Scripts" ? "text-black/60" : "text-black/30"
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
-          {nN_.includes("Materials" as never) ? <NewNotif_ /> : <div />}
+          {nN_.includes("Scripts" as never) ? <NewNotif_ /> : <div />}
         </div>
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
@@ -136,24 +104,24 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Consulting");
+            setMHI_("Archive");
           }}
           onClick={() => {
-            if (mTI_ == "Consulting") {
+            if (mTI_ == "Archive") {
               setMT_(!mT_);
             } else {
               setMT_(true);
-              setMTI_("Consulting");
+              setMTI_("Archive");
             }
           }}
         >
           <FontAwesomeIcon
-            icon={faComments}
+            icon={faFileArrowDown}
             className={`h-[25px] w-[25px] ${
-              mTI_ == "Consulting" ? "text-black/60" : "text-black/30"
+              mTI_ == "Archive" ? "text-black/60" : "text-black/30"
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
-          {nN_.includes("Consulting" as never) ? <NewNotif_ /> : <div />}
+          {nN_.includes("Archive" as never) ? <NewNotif_ /> : <div />}
         </div>
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
@@ -161,21 +129,21 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Cart");
+            setMHI_("Messages");
           }}
           onClick={() => {
             setCT_(!cT_);
           }}
         >
           <FontAwesomeIcon
-            icon={faCartShopping}
+            icon={faCommenting}
             className={`h-[25px] w-[25px] ${
               cT_ ? "text-black/60 animate-pulse" : "text-black/30"
             } ${
               dP_
                 ? "opacity-50 pointer-events-none cursor-wait"
                 : "opacity-100 pointer-events-auto"
-            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}            
+            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
           {cV_.length > 0 ? <NewNotifAlt_ /> : <div />}
         </div>
@@ -205,10 +173,12 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("Twitter");
           }}
         >
-          <FontAwesomeIcon
-            icon={faTwitter}
-            className={`h-[25px] w-[25px] text-black/30 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
-          />
+          <a href={`https://twitter.com/ofscriptai`} target={`_blank`}>
+            <FontAwesomeIcon
+              icon={faTwitter}
+              className={`h-[25px] w-[25px] text-black/30 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+            />
+          </a>
         </div>
         <div
           className={`min-h-[20px] min-w-[20px] m-2 relative flex justify-center items-center`}
@@ -219,10 +189,12 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("Instagram");
           }}
         >
-          <FontAwesomeIcon
-            icon={faInstagram}
-            className={`h-[25px] w-[25px] text-black/30 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
-          />
+          <a href={`https://instagram.com/ofscriptai`} target={`_blank`}>
+            <FontAwesomeIcon
+              icon={faInstagram}
+              className={`h-[25px] w-[25px] text-black/30 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+            />
+          </a>
         </div>
       </div>
     </div>
