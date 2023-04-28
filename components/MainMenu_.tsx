@@ -4,15 +4,10 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import {
-  faBrush,
-  faCartShopping,
   faCommenting,
-  faComments,
   faFileArrowDown,
   faPeopleGroup,
   faPerson,
-  faTractor,
-  faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import {

@@ -1,13 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import SideMenu_ from "../components/SideMenu_";
-import CenterStage_ from "../components/CenterStage_";
+import CenterStage_ from "../components/pages/CenterStage_";
 import { useRecoilState } from "recoil";
 import { MenuItem, MenuTrayItem } from "../components/atoms/atoms";
-import Storage_ from "../components/Storage_";
+import Archive_ from "../components/pages/Archive_";
+import Script_ from "../components/pages/Script_";
 import { getOptions } from "../Firebase";
 import { useEffect } from "react";
-import Modal_ from "../components/Modal_";
+import Scripts_ from "../components/pages/Scripts_";
 
 const Home: NextPage = () => {
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
@@ -32,14 +33,16 @@ const Home: NextPage = () => {
       <main className="flex w-full pl-[100px] min-h-[20px] flex-col items-center justify-center text-center relative overflow-scroll">
         {mTI_ == "" ? (
           <CenterStage_ />
-        ) : mTI_ == "Storage" ? (
-          <Storage_ />
+        ) : mTI_ == "Archive" ? (
+          <Archive_ />
+        ) : mTI_ == "Script" ? (
+          <Script_ />
+        ) : mTI_ == "Scripts" ? (
+          <Scripts_ />
         ) : (
           <div className={``} />
-        )}
-
-        {/* <Modal_/> */}
-
+        )
+      }
         <SideMenu_ />
       </main>
     </div>

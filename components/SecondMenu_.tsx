@@ -1,8 +1,6 @@
 import { useRecoilState } from "recoil";
 import { MenuTray, MenuTrayItem } from "./atoms/atoms";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Archive_, Options_ } from "./Selections_";
+import { Archive_ } from "./ui/Archive_";
 
 interface SecondMenu_Props {}
 

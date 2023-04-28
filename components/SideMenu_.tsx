@@ -1,6 +1,5 @@
 import FirstMenu_ from "./FirstMenu_";
 import SecondMenu_ from "./SecondMenu_";
-import StoreDP_ from "./StoreDP_";
 import ThirdMenu_ from "./ThirdMenu_";
 
 interface SideMenu_Props {}
@@ -11,7 +10,6 @@ const SideMenu_ = ({}: SideMenu_Props) => {
       <SecondMenu_ />
       <ThirdMenu_ />
       <FirstMenu_ />
-      <StoreDP_/>
     </div>
   );
 };

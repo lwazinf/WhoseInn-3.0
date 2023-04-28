@@ -1,6 +1,5 @@
 import { useRecoilState } from "recoil";
 import { CartTray } from "./atoms/atoms";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ThirdMenu_Props {}
 
