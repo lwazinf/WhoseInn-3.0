@@ -7,6 +7,11 @@ export const MenuHoverItem = atom({
   default: "",
 });
 
+export const AddOn = atom({
+  key: `${COMPONENT_NAME}/AddOn`,
+  default: false,
+});
+
 export const MenuTray = atom({
   key: `${COMPONENT_NAME}/MenuTray`,
   default: false,
@@ -37,9 +42,14 @@ export const CartTray = atom({
   default: false,
 });
 
-export const StoreDP = atom({
-  key: `${COMPONENT_NAME}/StoreDP`,
-  default: false,
+export const Images = atom({
+  key: `${COMPONENT_NAME}/Images`,
+  default: {},
+});
+
+export const ScriptObjects = atom({
+  key: `${COMPONENT_NAME}/ScriptObjects`,
+  default: [],
 });
 
 export const NewNotif = atom({

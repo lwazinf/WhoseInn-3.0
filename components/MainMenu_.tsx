@@ -17,11 +17,11 @@ import {
   MenuTray,
   MenuTrayItem,
   NewNotif,
-  StoreDP,
 } from "../components/atoms/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NewNotif_, { NewNotifAlt_ } from "./NewNotif_";
 import Branding_ from "./Branding_";
+import { useState } from "react";
 
 interface MainMenu_Props {}
 
@@ -32,7 +32,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
   const [cV_, setCV_] = useRecoilState(CartValue);
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
   const [nN_, setNN_] = useRecoilState(NewNotif);
-  const [dP_, setDP_] = useRecoilState(StoreDP);
+  const [dP_, setDP_] = useState(true);
 
   return (
     <div
@@ -56,7 +56,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
               setMT_(!mT_);
             } else {
               setMTI_("Script");
-              setMT_(true);
+              setMT_(false);
             }
           }}
         >

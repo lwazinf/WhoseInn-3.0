@@ -16,7 +16,8 @@
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

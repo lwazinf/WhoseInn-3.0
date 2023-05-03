@@ -1,27 +1,81 @@
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import {
+  faInstagram,
+  faLinkedin,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import {
+  faAdd,
   faAngleLeft,
   faAngleRight,
   faAt,
+  faBookmark,
+  faFilePdf,
+  faFloppyDisk,
   faGlobeAfrica,
+  faPerson,
   faPhone,
+  faRobot,
+  faShare,
+  faShareAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
+import { AddOn, Images, MenuTray, ScriptObjects } from "../atoms/atoms";
+import Profiles_ from "../ui/Profiles_";
+import Image_ from "../ui/Image_";
+import Video_ from "../ui/VideoPlayer_";
+import Label_ from "../ui/Label_";
+import { uuid } from "uuidv4";
 
 interface Script_Props {}
 
 const Script_ = ({}: Script_Props) => {
   const [switched_, setSwitched_] = useState(false);
-  const [linkedIn_, setLinkedIn_] = useState("linkedin.com/in/");
-  const [twitter_, setTwitter_] = useState("twitter.com/");
+  const [email_, setEmail_] = useState("");
+  const [phone_, setPhone_] = useState("");
+  const [website_, setWebsite_] = useState("");
+  const [linkedIn_, setLinkedIn_] = useState("");
+  const [twitter_, setTwitter_] = useState("");
+  const [instagram_, setInstagram_] = useState("");
+
+  const [mT_, setMT_] = useRecoilState(MenuTray);
+
+  const [addOn_, setAddOn_] = useRecoilState(AddOn);
+  const [sO_, setSO_] = useRecoilState(ScriptObjects);
+  const [images_, setImages_] = useState<any>();
+  const [name_, setName_] = useState("");
+  const [quote_, setQuote_] = useState("");
+  const [rank_, setRank_] = useState("");
+  const [age_, setAge_] = useState("");
+  const [location_, setLocation_] = useState("");
+  const [about_, setAbout_] = useState("");
+
+  const inputFile = useRef(null);
+
+  const onSelectFile = (e: { target: { files: any } }) => {
+    const selectedFile = e.target.files;
+    setImages_(selectedFile[0]);
+  };
   return (
     <div
-      className={`w-full min-h-screen flex flex-col justify-center items-center relative mb-12`}
+      className={`w-full min-h-screen flex flex-row justify-center items-center relative mb-12`}
     >
       <div
-        className={`w-[1200px] min-h-screen bg-white/90 flex flex-col justify-start items-center rounded-[6px] shadow-md p-10 mt-8`}
+        className={`w-[1200px] min-h-screen bg-white/90 flex flex-col justify-start items-center rounded-[6px] shadow-md p-10 mt-8 relative`}
       >
+        <div
+          className={`absolute top-[130px] right-[-45px] flex flex-col justify-center items-center min-w-4 min-h-4`}
+        >
+          <div
+            className={`w-8 h-8 flex flex-col justify-center items-center rounded-[3px]`}
+          >
+            <FontAwesomeIcon
+              icon={faRobot}
+              className={`h-[22px] w-[22px] hover:text-black/60 text-black/20 transition-all duration-[400ms] cursor-pointer`}
+            />
+          </div>
+        </div>
         <div
           className={`w-full h-full flex flex-row justify-center items-center`}
         >
@@ -29,11 +83,27 @@ const Script_ = ({}: Script_Props) => {
             className={`w-[40%] h-full flex flex-col justify-center items-center`}
           >
             <div
-              className={`w-full h-[712px] rounded-[6px] flex flex-col justify-center items-center relative overflow-hidden shadow-sm`}
+              className={`w-full h-[712px] rounded-[6px] flex flex-col justify-center items-center relative overflow-hidden shadow-sm cursor-pointer`}
+              onClick={() => {
+                // @ts-ignore
+                inputFile.current.click();
+              }}
             >
               <img
                 className={`w-full h-full object-cover opacity-90`}
-                src={`/assets/images/bazooka.jpg`}
+                src={`${
+                  images_
+                    ? URL.createObjectURL(images_)
+                    : "/assets/images/bazooka.jpg"
+                }`}
+              />
+              <input
+                type="file"
+                id="file"
+                ref={inputFile}
+                onChange={onSelectFile}
+                accept="image/png, image/jpeg, image/webp"
+                style={{ display: "none" }}
               />
             </div>
             <div
@@ -42,6 +112,10 @@ const Script_ = ({}: Script_Props) => {
               <textarea
                 className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
                 placeholder="This weapon has no ammunition, I use it as a hammer though!"
+                value={quote_}
+                    onChange={(obj_) => {
+                      setQuote_(obj_.target.value);
+                    }}
               />
             </div>
           </div>
@@ -55,6 +129,10 @@ const Script_ = ({}: Script_Props) => {
                 type={`text`}
                 className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
                 placeholder="Trooper #01"
+                value={name_}
+                onChange={(obj_) => {
+                  setName_(obj_.target.value)
+                }}
               />
             </div>
             <div
@@ -64,6 +142,10 @@ const Script_ = ({}: Script_Props) => {
                 type={`text`}
                 className={`_oswald min-h-0 text-[17px] font-thin p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left`}
                 placeholder="Artilery Operator, Mason"
+                value={rank_}
+                onChange={(obj_) => {
+                  setRank_(obj_.target.value)
+                }}
               />
               <div
                 className={`w-[50%] flex flex-row justify-start items-start`}
@@ -77,6 +159,10 @@ const Script_ = ({}: Script_Props) => {
                   type="text"
                   className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
                   placeholder="32"
+                  value={age_}
+                onChange={(obj_) => {
+                  setAge_(obj_.target.value)
+                }}
                 />
               </div>
             </div>
@@ -135,6 +221,10 @@ const Script_ = ({}: Script_Props) => {
                   type="text"
                   className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
                   placeholder="South Africa"
+                  value={location_}
+                onChange={(obj_) => {
+                  setLocation_(obj_.target.value)
+                }}
                 />
               </div>
             </div>
@@ -156,9 +246,13 @@ const Script_ = ({}: Script_Props) => {
               <textarea
                 className={`h-[126px] w-full _inter text-[14px] font-thin text-left text-black/80 min-h-2`}
                 placeholder={`Write a short description about yourself..`}
+                value={about_}
+                onChange={(obj_) => {
+                  setAbout_(obj_.target.value)
+                }}
               ></textarea>
               {/* </p> */}
-              <div
+              {/* <div
                 className={`w-[50px] h-full flex flex-col justify-start items-start`}
               >
                 <div
@@ -201,7 +295,7 @@ const Script_ = ({}: Script_Props) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div>
@@ -261,7 +355,7 @@ const Script_ = ({}: Script_Props) => {
             </div>
 
             <div
-              className={`w-full h-[10%] rounded-[6px] flex flex-row justify-end items-center px-3 pt-2`}
+              className={`w-full h-[10%] rounded-[6px] flex flex-row justify-end items-center px-3 pt-2 relative top-4`}
             >
               {/* <p className={`_inter text-[15px] font-thin text-black/50`}>
                 This weapon has no ammunition, I use it as a hammer though!
@@ -299,12 +393,17 @@ const Script_ = ({}: Script_Props) => {
             </div>
           </div>
         </div>
+
         <div
-          className={`w-full h-[180px] mt-4 bg-black/5 opacity-90 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden`}
+          className={`w-full h-[180px] mt-4 bg-black/5 opacity-90 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden mb-2`}
         >
           <div className={`w-full h-full flex flex-col absolute top-0`}>
             <img
-              src={`/assets/images/bazooka.jpg`}
+              src={`${
+                images_
+                  ? URL.createObjectURL(images_)
+                  : "/assets/images/bazooka.jpg"
+              }`}
               className={`w-full h-full object-cover opacity-20`}
             />
             <div className={`w-full h-full absolute transition-all`}>
@@ -327,6 +426,10 @@ const Script_ = ({}: Script_Props) => {
                 type={`text`}
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
                 placeholder="trooper01@ofscript.com"
+                value={email_}
+                    onChange={(obj_) => {
+                      setEmail_(obj_.target.value);
+                    }}
               />
             </div>
             <div
@@ -340,6 +443,10 @@ const Script_ = ({}: Script_Props) => {
                 type={`text`}
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 hover:text-black/60 transition-all duration-500 w-[50%] text-left pl-1`}
                 placeholder="000-000-0000"
+                value={phone_}
+                    onChange={(obj_) => {
+                      setPhone_(obj_.target.value);
+                    }}
               />
             </div>
           </div>
@@ -359,9 +466,9 @@ const Script_ = ({}: Script_Props) => {
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
                 value={linkedIn_}
                 onChange={(data_) => {
-                  setLinkedIn_(data_.target.value);
+                  setLinkedIn_('linkedin.com/in/'+data_.target.value);
                 }}
-                placeholder="linkedin.com/in/username"
+                placeholder="username"
               />
             </div>
             <div
@@ -376,9 +483,9 @@ const Script_ = ({}: Script_Props) => {
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
                 value={twitter_}
                 onChange={(data_) => {
-                  setTwitter_(data_.target.value);
+                  setTwitter_('twitter.com/in/'+data_.target.value);
                 }}
-                placeholder="twitter.com/in/username"
+                placeholder="username"
               />
             </div>
           </div>
@@ -397,27 +504,116 @@ const Script_ = ({}: Script_Props) => {
                 type={`text`}
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
                 placeholder="ofscript.ai"
+                value={website_}
+                    onChange={(obj_) => {
+                      setWebsite_(obj_.target.value);
+                    }}
               />
             </div>
             <div
-              className={`flex flex-row items-center justify-center w-full h-full opacity-0`}
+              className={`flex flex-row items-center justify-center w-full h-full`}
             >
               <FontAwesomeIcon
-                icon={faTwitter}
+                icon={faInstagram}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
               <input
                 type={`text`}
                 className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                value={twitter_}
+                value={instagram_}
                 onChange={(data_) => {
-                  setTwitter_(data_.target.value);
+                  setInstagram_('instagram.com/'+data_.target.value);
                 }}
-                placeholder="twitter.com/in/username"
+                placeholder="username"
               />
             </div>
           </div>
-
+        </div>
+        {sO_.map((obj_) => {
+          if (
+            // @ts-ignore
+            obj_.type == "Profiles"
+          ) {
+            return (
+              <Profiles_ uuid_={obj_.uid}/>
+            );
+          } else if (
+            // @ts-ignore
+            obj_.type == "Video Player"
+          ) {
+            return (
+              <Video_ uuid_={obj_.uid}/>
+            );
+          } else if (
+            // @ts-ignore
+            obj_.type == "Label"
+          ) {
+            return (
+              <Label_ uuid_={obj_.uid}/>
+            );
+          } else if (
+            // @ts-ignore
+            obj_.type == "Image"
+          ) {
+            return (
+              <Image_ uuid_={obj_.uid}/>
+            );
+          }
+        })}
+        <div
+          className={`w-full h-[180px] mt-4 bg-black/10 opacity-30 hover:opacity-60 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden transition-all duration-400 hover:duration-200 cursor-pointer`}
+          onClick={() => {
+            // setAddOn_(true);
+            setMT_(true);
+          }}
+        >
+          <div
+            className={`w-[30px] h-[30px] opacity-50  rounded-[50%] flex flex-col justify-center items-center`}
+          >
+            <FontAwesomeIcon
+              icon={faAdd}
+              className={`h-[20px] w-[20px] text-black/70 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+            />
+          </div>
+        </div>
+        <div className={`w-full flex flex-row justify-end items-center mt-4`}>
+          <p
+            className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/30 hover:text-red-500/80 mt-2`}
+            onClick={() => {
+              setSO_([])
+            }}
+          >
+            Clear
+          </p>
+          <p
+            className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/50 hover:text-red-500/80 mt-2`}
+            onClick={() => {
+              console.log({
+              name:name_,
+              quote:quote_,
+              rank:rank_,
+              age:age_,
+              location:location_,
+              about:about_,
+              email: email_,
+              phone: phone_,
+              website: website_,
+              linkedIn: linkedIn_,
+              twitter: twitter_,
+              instagram: instagram_,
+              features:sO_
+              })
+            }}
+          >
+            Save
+          </p>
+          <p
+            className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/50 hover:text-red-500/80 mt-2`}
+            onClick={() => {
+            }}
+          >
+            Share
+          </p>
         </div>
       </div>
     </div>

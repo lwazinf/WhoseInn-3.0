@@ -46,13 +46,13 @@ const Branding_ = ({ customStyle }: Branding_Props) => {
           </p>
           <div className={`h-full flex flex-col justify-center items-center mx-[5px]`}>
           <p
-            className={`._inter min-h-0 font-medium text-[12px] px-1 m-0 relative cursor-default text-white transition-all duration-500 rounded-[2px] bg-red-500 rotate-90 animate-pulse`}
+            className={`min-h-0 font-medium text-[12px] px-1 m-0 relative cursor-default text-white transition-all duration-500 rounded-[2px] bg-red-500 rotate-90 animate-pulse`}
           >
             AI
           </p>
           </div>
           <p
-            className={`._inter min-h-0 font-black text-[32px] p-0 m-0 relative cursor-default text-black/50 transition-all duration-500`}
+            className={`min-h-0 font-black text-[32px] p-0 m-0 relative cursor-default text-black/50 transition-all duration-500`}
           >
             SCRIPT
           </p>
