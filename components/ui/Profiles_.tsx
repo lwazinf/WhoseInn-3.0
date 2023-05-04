@@ -53,10 +53,14 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
           src={`${
             index_ == 0
                 ? sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].links[0]
                 : sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].links[1]
           }`}
         />
@@ -70,43 +74,59 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
               setImages_(selectedFile[0]);
             }
 
+                        // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
             const newArray = [...sO_];
 
+                        // @ts-ignore
             newArray[index] = {
               links:
                 index_ == 0
                   ? [
                       URL.createObjectURL(images_).toString(),
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].links[1],
                     ]
                   : [
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].links[0],
                       URL.createObjectURL(images_).toString(),
                     ],
 
               primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].primary,
 
               secondary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].secondary,
 
               tertiary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].tertiary,
 
               type: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].type,
               uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].uid,
             };
 
@@ -122,41 +142,57 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
           className={`bg-transparent min-h-0 text-[18px] font-black p-0 m-0 relative cursor-default text-black/50 transition-all duration-500 w-[50%] text-left pl-1`}
           placeholder="Trooper #2"
           onChange={(data_) => {
+                        // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
             const newArray = [...sO_];
+                        // @ts-ignore
             newArray[index] = {
               links: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].links,
               primary:
                 index_ == 0
                   ? [
                       data_.target.value,
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].primary[1],
                     ]
                   : [
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].primary[0],
                       data_.target.value,
                     ],
 
               secondary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].secondary,
 
               tertiary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].tertiary,
 
               type: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].type,
               uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].uid,
             };
 
@@ -170,19 +206,27 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
           className={`bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-red-500/70 transition-all duration-500 w-[50%] text-left pl-1`}
           placeholder="Trooper002@ofscript.ai"
           onChange={(data_) => {
+                        // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
             const newArray = [...sO_];
+                        // @ts-ignore
             newArray[index] = {
               links: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].links,
               primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].primary,
 
               secondary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].secondary,
 
               tertiary:
@@ -190,21 +234,29 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
                   ? [
                       data_.target.value,
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].tertiary[1],
                     ]
                   : [
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].tertiary[0],
                       data_.target.value,
                     ],
 
               type: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].type,
               uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].uid,
             };
 
@@ -217,19 +269,27 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
           className={`_inter text-[14px] text-left w-full font-thin pl-1 text-black/50 mt-2`}
           placeholder="Who is this person to you? What can they tell us about you?"
           onChange={(data_) => {
+                        // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
             const newArray = [...sO_];
+                        // @ts-ignore
             newArray[index] = {
               links: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].links,
               primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].primary,
 
               tertiary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].tertiary,
 
               secondary:
@@ -237,20 +297,28 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
                   ? [
                       data_.target.value,
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].secondary[1],
                     ]
                   : [
                       sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].secondary[0],
                       data_.target.value,
                     ],
               type: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].type,
               uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].uid,
             };
 

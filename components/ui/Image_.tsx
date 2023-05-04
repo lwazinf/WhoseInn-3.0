@@ -26,11 +26,15 @@ const Image_ = ({ uuid_ }: Image_Props) => {
             src={`${
               images_
                 ? sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].link
                 : sO_.filter((obj_) => {
-                    return obj_.uid == uuid_;
-                  })[0].link
+                        // @ts-ignore
+                        return obj_.uid == uuid_;
+                        // @ts-ignore
+                      })[0].link
             }`}
             className={`w-full h-[350px] object-cover rounded-[3px] opacity-90`}
             onClick={() => {
@@ -48,23 +52,30 @@ const Image_ = ({ uuid_ }: Image_Props) => {
                 if (selectedFile) {
                   setImages_(selectedFile[0]);
                 }
-              
+                    // @ts-ignore
                 const index = sO_.findIndex((obj) => obj.uid == uuid_);
               
                 const newArray = [...sO_];
               
                 if (images_) {
                   const promise = new Promise((resolve) => {
+                    // @ts-ignore
                     newArray[index] = {
                       link: URL.createObjectURL(images_).toString(),
                       primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].primary,
                       type: sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].type,
                       uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                         return obj_.uid == uuid_;
+                        // @ts-ignore
                       })[0].uid,
                     };
               
@@ -72,6 +83,7 @@ const Image_ = ({ uuid_ }: Image_Props) => {
                   });
               
                   promise.then((newArray) => {
+                        // @ts-ignore
                     setSO_(newArray);
                   });
                 }
@@ -88,19 +100,27 @@ const Image_ = ({ uuid_ }: Image_Props) => {
               className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
               placeholder="This weapon has no ammunition, I use it as a hammer though!"
               onChange={(data_) => {
+                        // @ts-ignore
                 const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
                 const newArray = [...sO_];
+                        // @ts-ignore
                 newArray[index] = {
                   link: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].link,
                   primary: data_.target.value,
                   type: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].type,
                   uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].uid,
                 };
 

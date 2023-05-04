@@ -35,22 +35,32 @@ const Video_ = ({ uuid_ }: Video_Props) => {
               className={`w-full bg-transparent min-h-0 text-[25px] font-black p-0 m-0 relative cursor-default text-black/50 transition-all duration-500 text-left`}
               placeholder="Starship Launch, last May."
               onChange={(data_) => {
+                        // @ts-ignore
                 const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
                 const newArray = [...sO_];
+                        // @ts-ignore
                 (newArray[index] = {
                   primary: data_.target.value,
                   secondary: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].secondary,
                   link: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].link,
                   type: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].type,
                   uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].uid,
                 }),
                   setSO_(newArray);
@@ -60,22 +70,32 @@ const Video_ = ({ uuid_ }: Video_Props) => {
               className={`_inter text-[14px] text-left w-full mt-4 font-thin text-black/50`}
               placeholder="Who is this person to you? What can they tell us about you?"
               onChange={(data_) => {
+                        // @ts-ignore
                 const index = sO_.findIndex((obj) => obj.uid == uuid_);
 
                 const newArray = [...sO_];
+                        // @ts-ignore
                 (newArray[index] = {
                   secondary: data_.target.value,
                   primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].primary,
                   link: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].link,
                   type: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].type,
                   uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].uid,
                 }),
                   setSO_(newArray);

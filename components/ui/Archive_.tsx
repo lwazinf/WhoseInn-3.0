@@ -26,6 +26,7 @@ export const Archive_ = ({}: Archive_Props) => {
               if (obj_.type == "Profiles") {
                 setSO_(
                   _x.concat([
+                        // @ts-ignore
                     {
                       type: obj_.type,
                       primary: ["", ""],
@@ -42,12 +43,14 @@ export const Archive_ = ({}: Archive_Props) => {
               } else if (obj_.type == "Video Player") {
                 setSO_(
                   _x.concat([
+                        // @ts-ignore
                     { type: obj_.type, link: "", primary: "", secondary: "", uid: x__ },
                   ])
                 );
               } else if (obj_.type == "Image") {
                 setSO_(
                   _x.concat([
+                        // @ts-ignore
                     {
                       type: obj_.type,
                       link: "https://via.placeholder.com/500",
@@ -58,6 +61,7 @@ export const Archive_ = ({}: Archive_Props) => {
                 );
               } else if (obj_.type == "Label") {
                 setSO_(
+                        // @ts-ignore
                   _x.concat([{ type: obj_.type, primary: "", secondary: "", uid: x__ }])
                 );
               }

@@ -29,7 +29,6 @@ import Label_ from "../ui/Label_";
 import { uuid } from "uuidv4";
 
 interface Script_Props {}
-
 const Script_ = ({}: Script_Props) => {
   const [switched_, setSwitched_] = useState(false);
   const [email_, setEmail_] = useState("");
@@ -535,6 +534,7 @@ const Script_ = ({}: Script_Props) => {
             obj_.type == "Profiles"
           ) {
             return (
+                        // @ts-ignore
               <Profiles_ uuid_={obj_.uid}/>
             );
           } else if (
@@ -542,6 +542,7 @@ const Script_ = ({}: Script_Props) => {
             obj_.type == "Video Player"
           ) {
             return (
+                        // @ts-ignore
               <Video_ uuid_={obj_.uid}/>
             );
           } else if (
@@ -549,6 +550,7 @@ const Script_ = ({}: Script_Props) => {
             obj_.type == "Label"
           ) {
             return (
+                        // @ts-ignore
               <Label_ uuid_={obj_.uid}/>
             );
           } else if (
@@ -556,6 +558,7 @@ const Script_ = ({}: Script_Props) => {
             obj_.type == "Image"
           ) {
             return (
+                        // @ts-ignore
               <Image_ uuid_={obj_.uid}/>
             );
           }

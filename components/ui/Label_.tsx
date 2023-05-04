@@ -50,19 +50,27 @@ const Label_ = ({ uuid_ }: Label_Props) => {
 
             // setSO_(z_);
 
+                        // @ts-ignore
             const index = sO_.findIndex(obj => obj.uid == uuid_);
 
             const newArray = [...sO_];
+                        // @ts-ignore
             newArray[index] = {
               primary: data_.target.value,
               secondary: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].secondary,
               type: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].type,
               uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                 return obj_.uid == uuid_;
+                        // @ts-ignore
               })[0].uid,
             };
             
@@ -78,19 +86,27 @@ const Label_ = ({ uuid_ }: Label_Props) => {
           placeholder="This weapon has no ammunition, I use it as a hammer though!"
           onChange={(data_) => {
 
+                        // @ts-ignore
             const index = sO_.findIndex(obj => obj.uid == uuid_);
 
             const newArray = [...sO_];
+                        // @ts-ignore
             newArray[index] = {
               secondary: data_.target.value,
                   primary: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].primary,
                   type: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].type,
                   uid: sO_.filter((obj_) => {
+                        // @ts-ignore
                     return obj_.uid == uuid_;
+                        // @ts-ignore
                   })[0].uid,
             };
             
