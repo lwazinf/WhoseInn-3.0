@@ -19,7 +19,7 @@ export const MenuTray = atom({
 
 export const MenuTrayItem = atom({
   key: `${COMPONENT_NAME}/MenuTrayItem`,
-  default: "",
+  default: "Script",
 });
 
 export const TagInfo = atom({

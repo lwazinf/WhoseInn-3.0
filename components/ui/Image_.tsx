@@ -26,10 +26,11 @@ const Image_ = ({ uuid_ }: Image_Props) => {
             src={`${
               images_
                 ? sO_.filter((obj_) => {
-                  return obj_.uid == uuid_;
-                })[0].link : sO_.filter((obj_) => {
-                  return obj_.uid == uuid_;
-                })[0].link
+                    return obj_.uid == uuid_;
+                  })[0].link
+                : sO_.filter((obj_) => {
+                    return obj_.uid == uuid_;
+                  })[0].link
             }`}
             className={`w-full h-[350px] object-cover rounded-[3px] opacity-90`}
             onClick={() => {
@@ -41,35 +42,42 @@ const Image_ = ({ uuid_ }: Image_Props) => {
             type="file"
             id="file"
             ref={inputFile}
-            onChange={(data_) => {
-              const selectedFile = data_.target.files;
-              if (selectedFile) {
-                setImages_(selectedFile[0]);
+            onChange={
+              (data_) => {
+                const selectedFile = data_.target.files;
+                if (selectedFile) {
+                  setImages_(selectedFile[0]);
+                }
+              
+                const index = sO_.findIndex((obj) => obj.uid == uuid_);
+              
+                const newArray = [...sO_];
+              
+                if (images_) {
+                  const promise = new Promise((resolve) => {
+                    newArray[index] = {
+                      link: URL.createObjectURL(images_).toString(),
+                      primary: sO_.filter((obj_) => {
+                        return obj_.uid == uuid_;
+                      })[0].primary,
+                      type: sO_.filter((obj_) => {
+                        return obj_.uid == uuid_;
+                      })[0].type,
+                      uid: sO_.filter((obj_) => {
+                        return obj_.uid == uuid_;
+                      })[0].uid,
+                    };
+              
+                    resolve(newArray);
+                  });
+              
+                  promise.then((newArray) => {
+                    setSO_(newArray);
+                  });
+                }
               }
-  
-              const index = sO_.findIndex((obj) => obj.uid == uuid_);
-  
-              const newArray = [...sO_];
-  
-              newArray[index] = {
-                link:
-                URL.createObjectURL(images_).toString(),
-  
-                primary: sO_.filter((obj_) => {
-                  return obj_.uid == uuid_;
-                })[0].primary,
-  
-                type: sO_.filter((obj_) => {
-                  return obj_.uid == uuid_;
-                })[0].type,
-                
-                uid: sO_.filter((obj_) => {
-                  return obj_.uid == uuid_;
-                })[0].uid,
-              };
-  
-              setSO_(newArray);
-            }}
+              
+            }
             accept="image/png, image/jpeg, image/webp"
             style={{ display: "none" }}
           />
