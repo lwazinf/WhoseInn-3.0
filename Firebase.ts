@@ -8,12 +8,15 @@ import {
 } from "firebase/auth";
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
 import { useEffect, useState } from "react";
 
@@ -32,32 +35,6 @@ const db = getFirestore(app);
 const store = getStorage(app);
 
 // // // // // // // // // //
-
-const getOptions = async () => {
-  const logistics_ = collection(db, "options/logistics/options");
-  const materials_ = collection(db, "options/materials/options");
-  const equipment_ = collection(db, "options/equipment/options");
-  const data_logistics = await getDocs(logistics_);
-  const data_materials = await getDocs(materials_);
-  const data_equipment = await getDocs(equipment_);
-  const data_logistics_ = data_logistics.docs.map((doc_) => ({
-    ...doc_.data(),
-    id: doc_.id,
-  }));
-  const data_materials_ = data_materials.docs.map((doc_) => ({
-    ...doc_.data(),
-    id: doc_.id,
-  }));
-  const data_equipment_ = data_equipment.docs.map((doc_) => ({
-    ...doc_.data(),
-    id: doc_.id,
-  }));
-  return {
-    logistics: data_logistics_,
-    materials: data_materials_,
-    equipment: data_equipment_
-  }
-};
 
 const useAuth = () => {
   const [currentUser_, setCurrentUser_] = useState();
@@ -85,16 +62,62 @@ const signOut_ = () => {
   return signOut(auth);
 };
 
+const createResume_ = (data_: any) => {
+  const collection_ = collection(db, "resumes");
+  setDoc(doc(collection_, data_.uuid), data_)
+  .then(() => {
+    console.log('Data written to Firestore');
+  })
+  .catch((error) => {
+    console.error('Error writing to Firestore:', error);
+  });
+};
+
+const getResume = async (data_: any) => {
+  const collection_ = collection(db, `resumes`);
+  const resume_ = doc(collection_, data_);
+
+  try {
+    const docSnapshot = await getDoc(resume_);
+    if (docSnapshot.exists()) {
+      return docSnapshot.data();
+    } else {
+      console.log('Document does not exist');
+      throw new Error('Document does not exist');
+    }
+  } catch (error) {
+    console.error('Error getting document:', error);
+    throw new Error('Error getting document');
+  }
+};
+
+const uploadImage = async (file: File) => {
+  console.log(file);
+  const storageRef = ref(store, 'images/' + new Date().getTime()); // Assuming 'store' is your Firebase Storage reference
+
+  try {
+    await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    console.log('Image uploaded successfully');
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+};
+
 // // // // // // // // // //
 
 export {
   db,
+  uploadImage,
   store,
   auth,
-  getOptions,
+  getResume,
   checkUp_,
   signUp_,
   signIn_,
   signOut_,
+  createResume_,
   useAuth,
 };

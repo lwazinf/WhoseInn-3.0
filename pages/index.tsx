@@ -6,7 +6,6 @@ import { useRecoilState } from "recoil";
 import { AddOn, MenuItem, MenuTrayItem, ScriptObjects } from "../components/atoms/atoms";
 import Archive_ from "../components/pages/Archive_";
 import Script_ from "../components/pages/Script_";
-import { getOptions } from "../Firebase";
 import { useEffect } from "react";
 import Scripts_ from "../components/pages/Scripts_";
 
@@ -17,13 +16,6 @@ const Home: NextPage = () => {
   const [sO_, setSO_] = useRecoilState(ScriptObjects);
 
   useEffect(() => {
-    const y_ = async () => {
-      const x_: any = await getOptions();
-      // @ts-ignore
-      // setCache_(x_);
-      setMI_(x_);
-    };
-    y_();
   }, []);
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
@@ -38,7 +30,7 @@ const Home: NextPage = () => {
         ) : mTI_ == "Archive" ? (
           <Archive_ />
         ) : mTI_ == "Script" ? (
-          <Script_ />
+          <Script_ docLock_={false} docData_={{}} />
         ) : mTI_ == "Scripts" ? (
           <Scripts_ />
         ) : (

@@ -140,7 +140,7 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
         <input
           type={`text`}
           className={`bg-transparent min-h-0 text-[18px] font-black p-0 m-0 relative cursor-default text-black/50 transition-all duration-500 w-[50%] text-left pl-1`}
-          placeholder="Trooper #2"
+          placeholder="Topic / Reference"
           onChange={(data_) => {
                         // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
@@ -204,7 +204,7 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
         <input
           type={`text`}
           className={`bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-red-500/70 transition-all duration-500 w-[50%] text-left pl-1`}
-          placeholder="Trooper002@ofscript.ai"
+          placeholder="you@server.com"
           onChange={(data_) => {
                         // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);
@@ -267,7 +267,7 @@ const Profile_ = ({ index_, uuid_ }: Profile_Props) => {
         />
         <textarea
           className={`_inter text-[14px] text-left w-full font-thin pl-1 text-black/50 mt-2`}
-          placeholder="Who is this person to you? What can they tell us about you?"
+          placeholder="Write a short piece about this topic/person"
           onChange={(data_) => {
                         // @ts-ignore
             const index = sO_.findIndex((obj) => obj.uid == uuid_);

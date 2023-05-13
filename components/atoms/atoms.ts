@@ -22,6 +22,11 @@ export const MenuTrayItem = atom({
   default: "Script",
 });
 
+export const DataState = atom({
+  key: `${COMPONENT_NAME}/DataState`,
+  default: "",
+});
+
 export const TagInfo = atom({
   key: `${COMPONENT_NAME}/TagInfo`,
   default: {image: "https://images.pexels.com/photos/2646237/pexels-photo-2646237.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", grid: ['', '', '', '']},

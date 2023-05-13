@@ -21,15 +21,26 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { AddOn, Images, MenuTray, ScriptObjects } from "../atoms/atoms";
+import {
+  AddOn,
+  DocLock,
+  DataState,
+  Images,
+  MenuTray,
+  ScriptObjects,
+} from "../atoms/atoms";
 import Profiles_ from "../ui/Profiles_";
 import Image_ from "../ui/Image_";
 import Video_ from "../ui/VideoPlayer_";
 import Label_ from "../ui/Label_";
 import { uuid } from "uuidv4";
+import { createResume_, getResume, uploadImage } from "../../Firebase";
 
-interface Script_Props {}
-const Script_ = ({}: Script_Props) => {
+interface Script_Props {
+  docData_: any;
+  docLock_: boolean;
+}
+const Script_ = ({ docData_, docLock_ }: Script_Props) => {
   const [switched_, setSwitched_] = useState(false);
   const [email_, setEmail_] = useState("");
   const [phone_, setPhone_] = useState("");
@@ -37,6 +48,7 @@ const Script_ = ({}: Script_Props) => {
   const [linkedIn_, setLinkedIn_] = useState("");
   const [twitter_, setTwitter_] = useState("");
   const [instagram_, setInstagram_] = useState("");
+  const [tag_, setTag_] = useState(["", "", "", ""]);
 
   const [mT_, setMT_] = useRecoilState(MenuTray);
 
@@ -55,7 +67,57 @@ const Script_ = ({}: Script_Props) => {
   const onSelectFile = (e: { target: { files: any } }) => {
     const selectedFile = e.target.files;
     setImages_(selectedFile[0]);
+    console.log(selectedFile[0])
   };
+
+  const [data_, setData_] = useState("");
+  const [data__, setData__] = useRecoilState(DataState);
+  const [quote, setQuote] = useState("");
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteLoadingError, setQuoteLoadingError] = useState(false);
+
+  const uploads_ = async (dataFile_: any) => {
+    let data__ = [...dataFile_];
+    await Promise.all(
+      data__.map(async (element, index) => {
+        if (element.type == "Image") {
+          // Uncomment the following lines if needed
+          try {
+            let uploadedLink = await uploadImage(element.link);
+            let z_ = { ...element };
+            z_.link = uploadedLink;
+            data__[index] = z_;
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        } 
+      })
+    );
+    return data__;
+  };
+
+  async function handleSubmit() {
+    const prompt = data_;
+
+    if (prompt) {
+      try {
+        setQuote("");
+        setQuoteLoadingError(false);
+        setQuoteLoading(true);
+
+        const response = await fetch(
+          "/api/chatGPT?prompt=" + encodeURIComponent(prompt)
+        );
+        const body = await response.json();
+        setQuote(body.quote);
+      } catch (error) {
+        console.error(error);
+        setQuoteLoadingError(true);
+      } finally {
+        setQuoteLoading(false);
+      }
+    }
+  }
   return (
     <div
       className={`w-full min-h-screen flex flex-row justify-center items-center relative mb-12`}
@@ -64,38 +126,37 @@ const Script_ = ({}: Script_Props) => {
         className={`w-[1200px] min-h-screen bg-white/90 flex flex-col justify-start items-center rounded-[6px] shadow-md p-10 mt-8 relative`}
       >
         <div
-          className={`absolute top-[130px] right-[-45px] flex flex-col justify-center items-center min-w-4 min-h-4`}
-        >
-          <div
-            className={`w-8 h-8 flex flex-col justify-center items-center rounded-[3px]`}
-          >
-            <FontAwesomeIcon
-              icon={faRobot}
-              className={`h-[22px] w-[22px] hover:text-black/60 text-black/20 transition-all duration-[400ms] cursor-pointer`}
-            />
-          </div>
-        </div>
-        <div
           className={`w-full h-full flex flex-row justify-center items-center`}
         >
           <div
             className={`w-[40%] h-full flex flex-col justify-center items-center`}
           >
             <div
-              className={`w-full h-[712px] rounded-[6px] flex flex-col justify-center items-center relative overflow-hidden shadow-sm cursor-pointer`}
+              className={`w-full h-[712px] rounded-[6px] flex flex-col justify-center items-center relative overflow-hidden shadow-sm ${
+                !docLock_ && "cursor-pointer"
+              }`}
               onClick={() => {
                 // @ts-ignore
-                inputFile.current.click();
+                if (!docLock_) {
+                  inputFile.current.click();
+                }
               }}
             >
-              <img
-                className={`w-full h-full object-cover opacity-90`}
-                src={`${
-                  images_
-                    ? URL.createObjectURL(images_)
-                    : "/assets/images/bazooka.jpg"
-                }`}
-              />
+              {!docLock_ ? (
+                <img
+                  className={`w-full h-full object-cover opacity-90`}
+                  src={`${
+                    images_
+                      ? URL.createObjectURL(images_)
+                      : "/assets/images/bazooka.jpg"
+                  }`}
+                />
+              ) : (
+                <img
+                  src={`${docData_?.image}`}
+                  className={`w-full h-full object-cover opacity-90`}
+                />
+              )}
               <input
                 type="file"
                 id="file"
@@ -108,14 +169,22 @@ const Script_ = ({}: Script_Props) => {
             <div
               className={`w-full h-[10%] rounded-[6px] flex flex-col justify-center items-center px-10 pt-2`}
             >
-              <textarea
-                className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
-                placeholder="This weapon has no ammunition, I use it as a hammer though!"
-                value={quote_}
-                    onChange={(obj_) => {
-                      setQuote_(obj_.target.value);
-                    }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
+                >
+                  {docData_?.quote}
+                </p>
+              ) : (
+                <textarea
+                  className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
+                  placeholder="Short smart quote.."
+                  value={quote_}
+                  onChange={(obj_) => {
+                    setQuote_(obj_.target.value);
+                  }}
+                />
+              )}
             </div>
           </div>
           <div
@@ -124,28 +193,45 @@ const Script_ = ({}: Script_Props) => {
             <div
               className={`w-full min-h-2 flex flex-row justify-start items-start`}
             >
-              <input
-                type={`text`}
-                className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
-                placeholder="Trooper #01"
-                value={name_}
-                onChange={(obj_) => {
-                  setName_(obj_.target.value)
-                }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
+                >
+                  {docData_?.name}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
+                  placeholder="Full Name"
+                  value={name_}
+                  onChange={(obj_) => {
+                    setName_(obj_.target.value);
+                  }}
+                />
+              )}
             </div>
             <div
               className={`w-full min-h-2 mt-4 flex flex-row justify-start items-start`}
             >
-              <input
-                type={`text`}
-                className={`_oswald min-h-0 text-[17px] font-thin p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left`}
-                placeholder="Artilery Operator, Mason"
-                value={rank_}
-                onChange={(obj_) => {
-                  setRank_(obj_.target.value)
-                }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_oswald min-h-0 text-[17px] font-thin p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left`}
+                >
+                  {docData_?.rank}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_oswald min-h-0 text-[17px] font-thin p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left`}
+                  placeholder="Title"
+                  value={rank_}
+                  onChange={(obj_) => {
+                    setRank_(obj_.target.value);
+                  }}
+                />
+              )}
+
               <div
                 className={`w-[50%] flex flex-row justify-start items-start`}
               >
@@ -154,15 +240,23 @@ const Script_ = ({}: Script_Props) => {
                 >
                   Age:
                 </p>
-                <input
-                  type="text"
-                  className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
-                  placeholder="32"
-                  value={age_}
-                onChange={(obj_) => {
-                  setAge_(obj_.target.value)
-                }}
-                />
+                {docLock_ ? (
+                  <p
+                    className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
+                  >
+                    {docData_?.age}
+                  </p>
+                ) : (
+                  <input
+                    type="text"
+                    className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
+                    placeholder="––"
+                    value={age_}
+                    onChange={(obj_) => {
+                      setAge_(obj_.target.value);
+                    }}
+                  />
+                )}
               </div>
             </div>
             <div
@@ -171,42 +265,55 @@ const Script_ = ({}: Script_Props) => {
               <div
                 className={`flex flex-row justify-start items-start w-[50%] h-[30px] rounded-[4px]`}
               >
-                <div
-                  className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
-                >
-                  <p
-                    className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
-                  >
-                    Creative
-                  </p>
-                </div>
-                <div
-                  className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
-                >
-                  <p
-                    className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
-                  >
-                    Commited
-                  </p>
-                </div>
-                <div
-                  className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
-                >
-                  <p
-                    className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
-                  >
-                    Punctual
-                  </p>
-                </div>
-                <div
-                  className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
-                >
-                  <p
-                    className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
-                  >
-                    Artistic
-                  </p>
-                </div>
+                {docData_?.tags
+                  ? docData_?.tags.map((obj_) => {
+                      return (
+                        <div
+                          className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
+                          key={obj_.id}
+                        >
+                          <p
+                            className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
+                          >
+                            {obj_}
+                          </p>
+                        </div>
+                      );
+                    })
+                  : [0, 1, 2, 3].map((obj__) => {
+                      return (
+                        <div
+                          className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
+                          key={obj__}
+                        >
+                          <input
+                            className={`_oswald w-[50px] min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center bg-transparent`}
+                            type="text"
+                            placeholder="--"
+                            onChange={(obj_) => {
+                              const tag__ = tag_;
+                              tag__[obj__] = obj_.target.value;
+                              setTag_(tag__);
+                            }}
+                          ></input>
+                        </div>
+                      );
+                    })}
+                {/* {docLock_ &&
+                  docData_?.tags.map((obj_) => {
+                    return (
+                      <div
+                        className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
+                        key={obj_.id}
+                      >
+                        <p
+                          className={`_oswald min-h-0 text-[14px] font-medium p-0 m-0 relative cursor-default transition-all duration-500 text-center pointer-events-none`}
+                        >
+                          {obj_}
+                        </p>
+                      </div>
+                    );
+                  })} */}
               </div>
               <div
                 className={`w-[50%] flex flex-row justify-start items-start`}
@@ -216,15 +323,23 @@ const Script_ = ({}: Script_Props) => {
                 >
                   Location:
                 </p>
-                <input
-                  type="text"
-                  className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
-                  placeholder="South Africa"
-                  value={location_}
-                onChange={(obj_) => {
-                  setLocation_(obj_.target.value)
-                }}
-                />
+                {docLock_ ? (
+                  <p
+                    className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
+                  >
+                    {docData_?.location}
+                  </p>
+                ) : (
+                  <input
+                    type="text"
+                    className={`_oswald min-h-0 text-[17px] font-thin p-0 ml-2 m-0 relative cursor-default text-black/70 transition-all duration-500 text-left`}
+                    placeholder="Where do you live?"
+                    value={location_}
+                    onChange={(obj_) => {
+                      setLocation_(obj_.target.value);
+                    }}
+                  />
+                )}
               </div>
             </div>
             <div
@@ -235,6 +350,20 @@ const Script_ = ({}: Script_Props) => {
               >
                 About Me
               </p>
+              {!docLock_ && (
+                <div
+                  className={`w-8 h-8 flex flex-col justify-center items-center rounded-[3px]`}
+                  onClick={() => {
+                    console.log("List of chatGPT commands");
+                    handleSubmit();
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faRobot}
+                    className={`h-[22px] w-[22px] hover:text-black/60 text-black/20 transition-all duration-[400ms] cursor-pointer`}
+                  />
+                </div>
+              )}
             </div>
             <div
               className={`w-full min-h-2 mt-2 flex flex-row justify-start items-start`}
@@ -242,14 +371,24 @@ const Script_ = ({}: Script_Props) => {
               {/* <p
                 className={`_inter text-[14px] font-thin text-left text-black/80`}
               > */}
-              <textarea
-                className={`h-[126px] w-full _inter text-[14px] font-thin text-left text-black/80 min-h-2`}
-                placeholder={`Write a short description about yourself..`}
-                value={about_}
-                onChange={(obj_) => {
-                  setAbout_(obj_.target.value)
-                }}
-              ></textarea>
+              {docLock_ ? (
+                <p
+                  className={`h-[126px] w-full _inter text-[14px] font-thin text-left text-black/80 min-h-2`}
+                >
+                  {docData_?.about}
+                </p>
+              ) : (
+                <textarea
+                  className={`h-[126px] w-full _inter text-[14px] font-thin text-left text-black/80 min-h-2`}
+                  placeholder={`Write a short description about yourself..`}
+                  value={about_}
+                  onChange={(obj_) => {
+                    setAbout_(obj_.target.value);
+                    setData_(obj_.target.value);
+                  }}
+                ></textarea>
+              )}
+
               {/* </p> */}
               {/* <div
                 className={`w-[50px] h-full flex flex-col justify-start items-start`}
@@ -397,14 +536,21 @@ const Script_ = ({}: Script_Props) => {
           className={`w-full h-[180px] mt-4 bg-black/5 opacity-90 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden mb-2`}
         >
           <div className={`w-full h-full flex flex-col absolute top-0`}>
-            <img
-              src={`${
-                images_
-                  ? URL.createObjectURL(images_)
-                  : "/assets/images/bazooka.jpg"
-              }`}
-              className={`w-full h-full object-cover opacity-20`}
-            />
+            {!docLock_ ? (
+              <img
+                src={`${
+                  images_
+                    ? URL.createObjectURL(images_)
+                    : "/assets/images/bazooka.jpg"
+                }`}
+                className={`w-full h-full object-cover opacity-20`}
+              />
+            ) : (
+              <img
+                src={`${docData_?.image}`}
+                className={`w-full h-full object-cover opacity-20`}
+              />
+            )}
             <div className={`w-full h-full absolute transition-all`}>
               <div
                 className={`w-full h-full bg-white/50 backdrop-blur-lg`}
@@ -421,15 +567,23 @@ const Script_ = ({}: Script_Props) => {
                 icon={faAt}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                placeholder="trooper01@ofscript.com"
-                value={email_}
-                    onChange={(obj_) => {
-                      setEmail_(obj_.target.value);
-                    }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.email}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                  placeholder="you@server.com"
+                  value={email_}
+                  onChange={(obj_) => {
+                    setEmail_(obj_.target.value);
+                  }}
+                />
+              )}
             </div>
             <div
               className={`flex flex-row items-center justify-center w-full h-full`}
@@ -438,15 +592,23 @@ const Script_ = ({}: Script_Props) => {
                 icon={faPhone}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 hover:text-black/60 transition-all duration-500 w-[50%] text-left pl-1`}
-                placeholder="000-000-0000"
-                value={phone_}
-                    onChange={(obj_) => {
-                      setPhone_(obj_.target.value);
-                    }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 hover:text-black/60 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.phone}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 hover:text-black/60 transition-all duration-500 w-[50%] text-left pl-1`}
+                  placeholder="000-000-0000"
+                  value={phone_}
+                  onChange={(obj_) => {
+                    setPhone_(obj_.target.value);
+                  }}
+                />
+              )}
             </div>
           </div>
 
@@ -460,15 +622,23 @@ const Script_ = ({}: Script_Props) => {
                 icon={faLinkedin}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                value={linkedIn_}
-                onChange={(data_) => {
-                  setLinkedIn_('linkedin.com/in/'+data_.target.value);
-                }}
-                placeholder="username"
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.linkedIn}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                  value={linkedIn_}
+                  onChange={(data_) => {
+                    setLinkedIn_(data_.target.value);
+                  }}
+                  placeholder="username"
+                />
+              )}
             </div>
             <div
               className={`flex flex-row items-center justify-center w-full h-full`}
@@ -477,15 +647,23 @@ const Script_ = ({}: Script_Props) => {
                 icon={faTwitter}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                value={twitter_}
-                onChange={(data_) => {
-                  setTwitter_('twitter.com/in/'+data_.target.value);
-                }}
-                placeholder="username"
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.twitter}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                  value={twitter_}
+                  onChange={(data_) => {
+                    setTwitter_(data_.target.value);
+                  }}
+                  placeholder="username"
+                />
+              )}
             </div>
           </div>
 
@@ -499,15 +677,23 @@ const Script_ = ({}: Script_Props) => {
                 icon={faGlobeAfrica}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                placeholder="ofscript.ai"
-                value={website_}
-                    onChange={(obj_) => {
-                      setWebsite_(obj_.target.value);
-                    }}
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.website}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                  placeholder="ofscript.ai"
+                  value={website_}
+                  onChange={(obj_) => {
+                    setWebsite_(obj_.target.value);
+                  }}
+                />
+              )}
             </div>
             <div
               className={`flex flex-row items-center justify-center w-full h-full`}
@@ -516,96 +702,131 @@ const Script_ = ({}: Script_Props) => {
                 icon={faInstagram}
                 className={`h-[20px] w-[20px] mr-4 text-black/70 hover:text-black/60 ml-2 transition-all duration-[400ms] cursor-pointer`}
               />
-              <input
-                type={`text`}
-                className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
-                value={instagram_}
-                onChange={(data_) => {
-                  setInstagram_('instagram.com/'+data_.target.value);
-                }}
-                placeholder="username"
-              />
+              {docLock_ ? (
+                <p
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                >
+                  {docData_?.instagram}
+                </p>
+              ) : (
+                <input
+                  type={`text`}
+                  className={`_inter bg-transparent min-h-0 text-[15px] font-medium p-0 m-0 relative cursor-default text-black/40 transition-all duration-500 w-[50%] text-left pl-1`}
+                  value={instagram_}
+                  onChange={(data_) => {
+                    setInstagram_(data_.target.value);
+                  }}
+                  placeholder="username"
+                />
+              )}
             </div>
           </div>
         </div>
+        {docData_.features != undefined &&
+          docData_.features.map((obj_) => {
+            return (
+              <div className="w-full justify-center items-center flex flex-row">
+                {obj_.type == "Label" ? (
+                  <Label_ uuid_={obj_.uid} docLock_={true} docData_={obj_} />
+                ) : (
+                  <Image_ uuid_={obj_.uid} docLock_={true} docData_={obj_} />
+                )}
+              </div>
+            );
+          })}
         {sO_.map((obj_) => {
           if (
             // @ts-ignore
             obj_.type == "Profiles"
           ) {
             return (
-                        // @ts-ignore
-              <Profiles_ uuid_={obj_.uid}/>
+              // @ts-ignore
+              <Profiles_ uuid_={obj_.uid} />
             );
           } else if (
             // @ts-ignore
             obj_.type == "Video Player"
           ) {
             return (
-                        // @ts-ignore
-              <Video_ uuid_={obj_.uid}/>
+              // @ts-ignore
+              <Video_ uuid_={obj_.uid} />
             );
           } else if (
             // @ts-ignore
             obj_.type == "Label"
           ) {
             return (
-                        // @ts-ignore
-              <Label_ uuid_={obj_.uid}/>
+              // @ts-ignore
+              <Label_ uuid_={obj_.uid} docLock_={false} />
             );
           } else if (
             // @ts-ignore
             obj_.type == "Image"
           ) {
             return (
-                        // @ts-ignore
-              <Image_ uuid_={obj_.uid}/>
+              // @ts-ignore
+              <Image_ uuid_={obj_.uid} />
             );
           }
         })}
-        <div
-          className={`w-full h-[180px] mt-4 bg-black/10 opacity-30 hover:opacity-60 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden transition-all duration-400 hover:duration-200 cursor-pointer`}
-          onClick={() => {
-            // setAddOn_(true);
-            setMT_(true);
-          }}
-        >
+
+        {!docLock_ && (
           <div
-            className={`w-[30px] h-[30px] opacity-50  rounded-[50%] flex flex-col justify-center items-center`}
+            className={`w-full h-[180px] mt-4 bg-black/10 opacity-30 hover:opacity-60 rounded-[3px] flex flex-col justify-center items-center p-6 px-14 relative overflow-hidden transition-all duration-400 hover:duration-200 cursor-pointer`}
+            onClick={() => {
+              // setAddOn_(true);
+              setMT_(true);
+            }}
           >
-            <FontAwesomeIcon
-              icon={faAdd}
-              className={`h-[20px] w-[20px] text-black/70 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
-            />
+            <div
+              className={`w-[30px] h-[30px] opacity-50  rounded-[50%] flex flex-col justify-center items-center`}
+            >
+              <FontAwesomeIcon
+                icon={faAdd}
+                className={`h-[20px] w-[20px] text-black/70 hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <div className={`w-full flex flex-row justify-end items-center mt-4`}>
           <p
             className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/30 hover:text-red-500/80 mt-2`}
             onClick={() => {
-              setSO_([])
+              setSO_([]);
             }}
           >
             Clear
           </p>
           <p
             className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/50 hover:text-red-500/80 mt-2`}
-            onClick={() => {
-              console.log({
-              name:name_,
-              quote:quote_,
-              rank:rank_,
-              age:age_,
-              location:location_,
-              about:about_,
-              email: email_,
-              phone: phone_,
-              website: website_,
-              linkedIn: linkedIn_,
-              twitter: twitter_,
-              instagram: instagram_,
-              features:sO_
-              })
+            onClick={async () => {
+              const uuid_ = uuid();
+
+              let uploadedLink = await uploadImage(images_)
+                .then((downloadURL) => {
+                  return downloadURL;
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+              createResume_({
+                uuid: uuid_,
+                name: name_,
+                tags: tag_,
+                quote: quote_,
+                rank: rank_,
+                age: age_,
+                location: location_,
+                about: about_,
+                email: email_,
+                phone: phone_,
+                website: website_,
+                linkedIn: linkedIn_,
+                twitter: twitter_,
+                instagram: instagram_,
+                features: await uploads_(sO_),
+                image: uploadedLink,
+              });
             }}
           >
             Save
@@ -613,6 +834,7 @@ const Script_ = ({}: Script_Props) => {
           <p
             className={`_inter cursor-pointer transition-all duration-200 text-[14px] text-left mx-2 font-thin pl-1 text-black/50 hover:text-red-500/80 mt-2`}
             onClick={() => {
+              console.log(docData_.features);
             }}
           >
             Share
