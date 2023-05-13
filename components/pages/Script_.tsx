@@ -137,7 +137,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
               onClick={() => {
                 // @ts-ignore
                 if (!docLock_) {
-                  inputFile.current.click();
+                  inputFile?.current.click();
                 }
               }}
             >
