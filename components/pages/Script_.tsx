@@ -23,7 +23,6 @@ import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   AddOn,
-  DocLock,
   DataState,
   Images,
   MenuTray,
