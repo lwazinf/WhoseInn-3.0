@@ -137,6 +137,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
               onClick={() => {
                 // @ts-ignore
                 if (!docLock_ & inputFile != null) {
+                      // @ts-ignore
                   inputFile.current.click();
                 }
               }}
@@ -265,7 +266,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
                 className={`flex flex-row justify-start items-start w-[50%] h-[30px] rounded-[4px]`}
               >
                 {docData_?.tags
-                  ? docData_?.tags.map((obj_) => {
+                  ? docData_?.tags.map((obj_: any) => {
                       return (
                         <div
                           className={`flex flex-row justify-center items-center min-w-[40px] h-[25px] rounded-[4px] bg-black/10 hover:bg-black/30 transition-all duration-[1000ms] hover:duration-200 cursor-pointer px-2 mr-2 text-black/50 hover:text-white/80`}
@@ -722,7 +723,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
           </div>
         </div>
         {docData_.features != undefined &&
-          docData_.features.map((obj_) => {
+          docData_.features.map((obj_: any) => {
             return (
               <div className="w-full justify-center items-center flex flex-row">
                 {obj_.type == "Label" ? (

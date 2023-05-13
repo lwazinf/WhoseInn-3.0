@@ -66,9 +66,13 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
                     reader.onload = (e) => {
                       // @ts-ignore
                       newArray[index] = {
+                        // @ts-ignore
                         link: e.target.result, // Use the result from FileReader as the link
+                      // @ts-ignore
                         primary: sO_.filter((obj_) => obj_.uid == uuid_)[0].primary,
+                      // @ts-ignore
                         type: sO_.filter((obj_) => obj_.uid == uuid_)[0].type,
+                      // @ts-ignore
                         uid: sO_.filter((obj_) => obj_.uid == uuid_)[0].uid,
                       };
               
