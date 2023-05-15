@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
 import { MenuTray, MenuTrayItem } from "./atoms/atoms";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface Branding_Props {
   customStyle: string;
@@ -10,6 +11,7 @@ const Branding_ = ({ customStyle }: Branding_Props) => {
   const [mT_, setMT_] = useRecoilState(MenuTray);
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
   const [pulse_, setPulse_] = useState(false)
+  const router = useRouter()
   return (
     <div
       className={`flex flex-col justify-start items-center h-[320px] w-full pt-[190px] hover:pt-[195px] opacity-60 hover:opacity-100 transition-all duration-[1000ms] hover:duration-200 ${customStyle}`}
@@ -27,7 +29,7 @@ const Branding_ = ({ customStyle }: Branding_Props) => {
           className={`flex flex-col w-full h-full justify-center items-center opacity-[0.65] rounded-[4px] cursor-pointer`}
           onClick={() => {
             setMTI_("");
-            setMT_(false);
+            router.push('/');
           }}
         >
           <img src={`/assets/images/LwaziNF.png`} className={`w-full object-cover`}/>

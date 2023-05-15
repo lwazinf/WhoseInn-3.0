@@ -188,21 +188,21 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
             </div>
           </div>
           <div
-            className={`w-[60%] h-full rounded-[6px] flex flex-col justify-start items-start pl-10 pt-4`}
+            className={`w-[60%] h-full rounded-[6px] flex flex-col justify-start items-start pl-10 pt-[2px]`}
           >
             <div
               className={`w-full min-h-2 flex flex-row justify-start items-start`}
             >
               {docLock_ ? (
                 <p
-                  className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
+                  className={`min-h-0 font-black text-[30px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
                 >
                   {docData_?.name}
                 </p>
               ) : (
                 <input
                   type={`text`}
-                  className={`_oswald min-h-0 font-black text-[25px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
+                  className={`min-h-0 font-black text-[30px] p-0 m-0 relative cursor-default text-black/70 transition-all duration-500`}
                   placeholder="Full Name"
                   value={name_}
                   onChange={(obj_) => {
@@ -809,7 +809,8 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
                 .catch((error) => {
                   console.error("Error:", error);
                 });
-              createResume_({
+              // createResume_({
+                console.log({
                 uuid: uuid_,
                 name: name_,
                 tags: tag_,

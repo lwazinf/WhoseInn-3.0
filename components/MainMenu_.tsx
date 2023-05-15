@@ -6,6 +6,7 @@ import {
 import {
   faCommenting,
   faFileArrowDown,
+  faHeadphones,
   faPeopleGroup,
   faPerson,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,7 +22,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NewNotif_, { NewNotifAlt_ } from "./NewNotif_";
 import Branding_ from "./Branding_";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface MainMenu_Props {}
 
@@ -33,6 +35,14 @@ const MainMenu_ = ({}: MainMenu_Props) => {
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
   const [nN_, setNN_] = useRecoilState(NewNotif);
   const [dP_, setDP_] = useState(true);
+  const router = useRouter();
+  const { query: _data } = router;
+
+  const q = router.query
+
+  useEffect(() => {
+    setMT_(false)
+  }, [q])
 
   return (
     <div
@@ -52,12 +62,10 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("Script");
           }}
           onClick={() => {
-            if (mTI_ == "Script") {
-              setMT_(!mT_);
-            } else {
-              setMTI_("Script");
-              setMT_(false);
-            }
+            
+            setMTI_("Script");
+            router.push('/script');
+            
           }}
         >
           <FontAwesomeIcon
@@ -74,24 +82,25 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("");
           }}
           onMouseEnter={() => {
-            setMHI_("Scripts");
+            setMHI_("Podcasts");
           }}
           onClick={() => {
-            if (mTI_ == "Scripts") {
-              setMT_(!mT_);
+            if (mTI_ == "Podcasts") {
+              router.push('/podcast');
+              // setMT_(!mT_);
             } else {
               setMT_(true);
-              setMTI_("Scripts");
+              setMTI_("Podcasts");
             }
           }}
         >
           <FontAwesomeIcon
-            icon={faPeopleGroup}
-            className={`h-[25px] w-[25px] ${
-              mTI_ == "Scripts" ? "text-black/60" : "text-black/30"
+            icon={faHeadphones}
+            className={`h-[21px] w-[21px] ${
+              mTI_ == "Podcasts" ? "text-black/60" : "text-black/30"
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
-          {nN_.includes("Scripts" as never) ? <NewNotif_ /> : <div />}
+          {nN_.includes("Podcasts" as never) ? <NewNotif_ /> : <div />}
         </div>
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
@@ -101,9 +110,9 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           onMouseEnter={() => {
             setMHI_("Archive");
           }}
-          onClick={() => {
-            if (mTI_ == "Archive") {
-              setMT_(!mT_);
+          onClick={() => {if (mTI_ == "Archive") {
+              router.push('/archive');
+              // setMT_(!mT_);
             } else {
               setMT_(true);
               setMTI_("Archive");

@@ -24,8 +24,8 @@ const SecondMenu_ = ({}: SecondMenu_Props) => {
             {mTI_ == "Script"
               ? "Your Script"
               : mTI_ == "Archive"
-              ? "Archived Scripts"
-              : mTI_ == "Scripts"
+              ? "Archived Podcasts"
+              : mTI_ == "Podcasts"
               ? "Script Discovery"
               : "WhoseInn"}
           </p>
@@ -36,7 +36,7 @@ const SecondMenu_ = ({}: SecondMenu_Props) => {
               ? "Customize a portfolio that reflects your personal brand."
               : mTI_ == "Archive"
               ? "Access your stored resumes, organized in their separate, designated collections."
-              : mTI_ == "Scripts"
+              : mTI_ == "Podcasts"
               ? "Discover potential resume leads in this repository."
               : "Unearth your project's full potential with our extensive mining database at your fingertips."}
           </p>
@@ -52,7 +52,7 @@ const SecondMenu_ = ({}: SecondMenu_Props) => {
           <div className={`w-[200px] h-[1px] bg-black/20 mb-2 mt-2`} />
           {mTI_ == "Archive" ? (
             <Archive_ />
-          ) : mTI_ == "Scripts" ? (
+          ) : mTI_ == "Podcasts" ? (
             <Archive_ />
             ) : mTI_ == "Script" ? (
             <Archive_ />

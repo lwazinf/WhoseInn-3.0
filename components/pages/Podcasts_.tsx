@@ -1,15 +1,15 @@
-interface Scripts_Props {
+interface Podcasts_Props {
     
 }
  
-const Scripts_ = ({}:Scripts_Props) => {
+const Podcasts_ = ({}:Podcasts_Props) => {
     return ( 
       <div
       className={`w-full h-screen flex flex-col justify-center items-center relative mb-12`}
     >
-      Scripts
+      Podcasts
     </div>
      );
 }
  
-export default Scripts_;
+export default Podcasts_;

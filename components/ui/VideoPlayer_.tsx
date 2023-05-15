@@ -19,7 +19,7 @@ const Video_ = ({ uuid_ }: Video_Props) => {
           <video
             src="https://player.vimeo.com/external/178167299.sd.mp4?s=7b8659225e3202c779718a4a0d5a88df9801037e&profile_id=164&oauth2_token_id=57447761"
             className="min-w-[680px] h-full object-cover rounded-[3px]"
-            autoPlay
+            autoPlay={false}
             controls
           ></video>
           <div

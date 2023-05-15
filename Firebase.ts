@@ -92,7 +92,7 @@ const getResume = async (data_: any) => {
 };
 
 const uploadImage = async (file: File) => {
-  console.log(file);
+  if(file){console.log(file)}
   const storageRef = ref(store, 'images/' + new Date().getTime()); // Assuming 'store' is your Firebase Storage reference
 
   try {
