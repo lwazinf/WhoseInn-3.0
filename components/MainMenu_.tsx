@@ -63,8 +63,12 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {
             
-            setMTI_("Script");
+            if(router.pathname.replace('/', '').charAt(0).toUpperCase() + router.pathname.replace('/', '').slice(1) != 'Script'){
+              setMTI_("Script");
             router.push('/script');
+            }else{
+              setMT_(!mT_);
+            }
             
           }}
         >
@@ -86,8 +90,9 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {
             if (mTI_ == "Podcasts") {
-              router.push('/podcast');
-              // setMT_(!mT_);
+              router.push('/podcasts');
+              setMT_(false);
+              setMTI_("Podcasts");
             } else {
               setMT_(true);
               setMTI_("Podcasts");
@@ -112,7 +117,8 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           }}
           onClick={() => {if (mTI_ == "Archive") {
               router.push('/archive');
-              // setMT_(!mT_);
+              setMT_(false);
+              setMTI_(router.pathname.replace('/', '').charAt(0).toUpperCase() + router.pathname.replace('/', '').slice(1));
             } else {
               setMT_(true);
               setMTI_("Archive");

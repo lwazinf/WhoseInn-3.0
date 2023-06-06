@@ -66,7 +66,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
   const onSelectFile = (e: { target: { files: any } }) => {
     const selectedFile = e.target.files;
     setImages_(selectedFile[0]);
-    console.log(selectedFile[0])
+    console.log(selectedFile[0]);
   };
 
   const [data_, setData_] = useState("");
@@ -75,6 +75,19 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [quoteLoadingError, setQuoteLoadingError] = useState(false);
 
+  function base64ToFile(base64DataUrl, fileName) {
+    const byteString = atob(base64DataUrl.split(",")[1]); // Remove the data:image/jpeg;base64 part
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ab], { type: "image/jpeg" }); // Set the appropriate MIME type
+    return new File([blob], fileName, { type: "image/jpeg" });
+  }
+
   const uploads_ = async (dataFile_: any) => {
     let data__ = [...dataFile_];
     await Promise.all(
@@ -82,14 +95,16 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
         if (element.type == "Image") {
           // Uncomment the following lines if needed
           try {
-            let uploadedLink = await uploadImage(element.link);
+            let uploadedLink = await uploadImage(
+              base64ToFile(element.link, "image.jpg")
+            );
             let z_ = { ...element };
             z_.link = uploadedLink;
             data__[index] = z_;
           } catch (error) {
             console.error("Error:", error);
           }
-        } 
+        }
       })
     );
     return data__;
@@ -136,8 +151,8 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
               }`}
               onClick={() => {
                 // @ts-ignore
-                if (!docLock_ & inputFile != null) {
-                      // @ts-ignore
+                if (!docLock_ & (inputFile != null)) {
+                  // @ts-ignore
                   inputFile.current.click();
                 }
               }}
@@ -360,7 +375,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
                 >
                   <FontAwesomeIcon
                     icon={faRobot}
-                    className={`h-[22px] w-[22px] hover:text-black/60 text-black/20 transition-all duration-[400ms] cursor-pointer`}
+                    className={`h-[22px] w-[22px] hover:text-black/5 text-black/10 transition-all duration-[400ms] cursor-pointer`}
                   />
                 </div>
               )}
@@ -810,7 +825,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
                   console.error("Error:", error);
                 });
               // createResume_({
-                console.log({
+              console.log({
                 uuid: uuid_,
                 name: name_,
                 tags: tag_,
@@ -828,6 +843,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
                 features: await uploads_(sO_),
                 image: uploadedLink,
               });
+              console.log(typeof images_);
             }}
           >
             Save

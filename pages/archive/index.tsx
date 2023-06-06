@@ -24,35 +24,7 @@ const Home: NextPage = () => {
       <main className="flex w-full pl-[100px] min-h-[20px] flex-col items-center justify-center text-center relative overflow-scroll">
         <Archive_ />
         
-        {/* <div
-          className={`fixed top-0 left-0 w-full h-screen bg-black/5 backdrop-blur-md flex flex-col justify-center items-center ${
-            addOn_
-              ? "pointer-events-auto opacity-100"
-              : "pointer-events-none opacity-0"
-          } transition-all duration-200`}
-          onClick={() => {
-            
-          }}
-        >
-          <div className={`w-[800px] min-h-[400px] bg-white rounded-[4px] p-6 grid grid-cols-2 gap-2 justify-start items-start`}>
-            
-            {
-              ['blank', 'video', 'single', 'label'].map((obj_) => {
-                return (
-                  <div
-              className={`w-full h-full bg-black/5 hover:bg-black/20 transition-all duration-700 hover:duration-200 rounded-[2px] flex flex-row justify-center items-center cursor-pointer mb-2`}
-              key={obj_}
-              onClick={() => {
-                const _x = sO_;
-                setSO_(_x.concat([{type: obj_}]));
-                setAddOn_(false);
-              }}
-            ></div>
-                )
-              })
-            }
-          </div>
-        </div> */}
+        
         <SideMenu_ />
       </main>
     </div>

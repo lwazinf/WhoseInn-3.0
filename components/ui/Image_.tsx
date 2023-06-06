@@ -16,7 +16,19 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
     const selectedFile = e.target.files;
     setImages_(selectedFile);
   };
-  const data_ = sO_.filter((obj_) => {
+  function base64ToFile(base64DataUrl, fileName) {
+    const byteString = atob(base64DataUrl.split(',')[1]); // Remove the data:image/jpeg;base64 part
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    
+    const blob = new Blob([ab], { type: 'image/jpeg' }); // Set the appropriate MIME type
+    return new File([blob], fileName, { type: 'image/jpeg' });
+  }
+  const data___ = sO_.filter((obj_) => {
     // @ts-ignore
     return obj_.uid == uuid_;
     // @ts-ignore
@@ -32,6 +44,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
         onClick={() => {
           // @ts-ignore
           !docLock_ && inputFile.current.click();
+          
         }}>
           {docLock_ ? (
             <img
@@ -42,7 +55,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
           ) : (
             <img
             src={`${
-              typeof data_ != 'string' ? URL.createObjectURL(data_) : data_
+              data___ != 'https://via.placeholder.com/500' ? URL.createObjectURL(base64ToFile(data_, "image.jpg")) : data___
             }`}
               className={`w-full h-[350px] object-cover rounded-[3px] opacity-90 cursor-pointer`}
               
@@ -55,6 +68,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
               ref={inputFile}
               onChange={(data_) => {
                 setImages_(data_.target.files);
+                
                 // @ts-ignore
                 const index = sO_.findIndex((obj) => obj.uid == uuid_);
               
@@ -67,7 +81,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
                       // @ts-ignore
                       newArray[index] = {
                         // @ts-ignore
-                        link: e.target.result, // Use the result from FileReader as the link
+                        link: data_.target.files[0], // Use the result from FileReader as the link
                       // @ts-ignore
                         primary: sO_.filter((obj_) => obj_.uid == uuid_)[0].primary,
                       // @ts-ignore
@@ -78,13 +92,14 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
               
                       resolve(newArray);
                     };
-                    reader.readAsDataURL(images_[0]);
+                    // reader.readAsDataURL(images_[0]);
                   });
               
                   promise.then((newArray) => {
                     // @ts-ignore
-                    setSO_(newArray);
+                    setSO_(newArray); 
                   });
+                  console.log(data_.target.files[0])
                 }
               }}
               
@@ -104,7 +119,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
             ) : (
               <textarea
                 className={`_inter text-[15px] text-center w-full font-thin text-black/50`}
-                placeholder="This weapon has no ammunition, I use it as a hammer though!"
+                placeholder="Long smart quote.."
                 onChange={(data_) => {
                   // @ts-ignore
                   const index = sO_.findIndex((obj) => obj.uid == uuid_);

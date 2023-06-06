@@ -14,7 +14,9 @@ const Branding_ = ({ customStyle }: Branding_Props) => {
   const router = useRouter()
   return (
     <div
-      className={`flex flex-col justify-start items-center h-[320px] w-full pt-[190px] hover:pt-[195px] opacity-60 hover:opacity-100 transition-all duration-[1000ms] hover:duration-200 ${customStyle}`}
+      className={`flex flex-col justify-start items-center h-[320px] w-full ${
+        mTI_ == '' ? 'opacity-100 pt-[195px]' : 'opacity-60 hover:opacity-100 pt-[190px] hover:pt-[195px]'
+      } transition-all duration-[1000ms] hover:duration-200 ${customStyle}`}
       onMouseEnter={() => {
         setPulse_(true)
       }}
@@ -42,7 +44,7 @@ const Branding_ = ({ customStyle }: Branding_Props) => {
           className={`flex flex-row justify-end items-start min-w-2 min-h-2`}
         >
           <p
-            className={`._inter min-h-0 font-medium text-[32px] p-0 m-0 relative cursor-default text-black/20 transition-all duration-500`}
+            className={`_inter min-h-0 font-medium text-[32px] p-0 m-0 relative cursor-default text-black/20 transition-all duration-500`}
           >
             OF
           </p>
