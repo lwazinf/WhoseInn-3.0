@@ -30,6 +30,22 @@
     font-family: 'Oswald', sans-serif;
   }
 
+  .redAir {
+    background: rgb(138,8,8);
+    background: -moz-linear-gradient(11deg, rgba(138,8,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    background: -webkit-linear-gradient(11deg, rgba(138,8,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    background: linear-gradient(11deg, rgba(138,8,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#8a0808",endColorstr="#211d1d",GradientType=1); 
+  }
+
+  .greenAir {
+    background: rgb(42,138,8);
+    background: -moz-linear-gradient(11deg, rgba(42,138,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    background: -webkit-linear-gradient(11deg, rgba(42,138,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    background: linear-gradient(11deg, rgba(42,138,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2a8a08",endColorstr="#211d1d",GradientType=1); 
+  }
+
   input,
   textarea {
     border: none;
