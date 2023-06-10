@@ -19,72 +19,116 @@ import { useState } from "react";
 import { checkUp_, signIn_, useAuth } from "../../Firebase";
 import QRCode from "react-qr-code";
 
-interface Archive_Props {}
+interface Archive_Props {
+  data: any;
+}
 
-const Archive_ = ({}: Archive_Props) => {
+const Archive_ = ({ data }: Archive_Props) => {
+  const [prompt_, setPrompt_] = useState('')
+  async function handleSubmit (data__: any) {
+    if (data__) {
+      // try {
+      //   setQuote("");
+      //   setQuoteLoadingError(false);
+      //   setQuoteLoading(true);
+      try{
+        const response = await fetch(
+          "/api/chatGPT?prompt=" + encodeURIComponent(data__)
+        );
+        const body = await response.json();
+        console.log(body.quote);
+      } catch (error) {
+        console.error(error);
+        // setQuoteLoadingError(true);
+      } finally {
+        // setQuoteLoading(false);
+      }
+    }
+  }
   return (
     <div
       className={`w-full min-h-2 flex flex-row justify-center items-start relative mb-12`}
     >
       <div
-        className={`min-w-[120px] min-h-2 bg-white/90 rounded-[4px] shadow-lg flex flex-col justify-start items-center p-3 pt-8 mt-8 relative`}
+        className={`min-w-[120px] min-h-2 bg-white/90 rounded-[4px] shadow-lg flex flex-col justify-start items-center p-3 pt-8 mt-8 relative transition-all duration-[400ms]`}
       >
-        {[1].map((obj_) => {
-          return <Lead_ />;
-        })}
         <div
-          className={`w-[800px] min-h-[400px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[4px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
+      className={`duration-[200ms] transition-all ${
+        data ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+        {[1].map((obj_) => {
+          return <Lead_ data={data} />;
+        })}
+        </div>
+        <div
+          className={`w-[800px] min-h-[400px] ${
+            data ? 'opacity-50' : 'opacity-0'
+          } mt-2 pt-4 pb-4 bg-black/5 rounded-[4px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-[800ms] hover:duration-200`}
           onClick={() => {
             // setAddOn_(true);
           }}
         >
-          <QRCode
+          <div
+      className={`duration-[200ms] transition-all ${
+        data ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+          {
+            data && <QRCode
             className={`w-[185px] h-[185px] absolute top-6 left-8 mix-blend-multiply`}
-            value={"IVORY TOWER GROUP"}
+            value={'http://ofscript.ai/archive/'+data.uid}
           />
+          }
+          </div>
           {[
             {
               type: "twoCell",
               H1: "Company Name",
               H2: "Email",
-              P1: "Ivory Tower Group",
-              P2: "info@itg.com",
+              P1: data.name,
+              P2: data.email,
             },
             {
               type: "twoCell",
               H1: "Website",
               H2: "Number",
-              P1: "https://itg.com",
-              P2: "0937466528",
+              P1: "https://"+data.website,
+              P2: data.phone,
             },
             {
               type: "twoCell",
               H1: "Category",
               H2: "Locations",
-              P1: "Paint",
-              P2: "Pretoria, Benoni, Midrand, Capetown",
+              P1: data.category?.charAt(0).toUpperCase() + data.category?.slice(1),
+              P2: data.locations?.join(', '),
             },
             {
               type: "twoCell",
               H1: "Industry",
               H2: "Type",
-              P1: "Construction",
-              P2: "Product",
+              P1: data.industry?.charAt(0).toUpperCase() + data.industry?.slice(1),
+              P2: data.type?.charAt(0).toUpperCase() + data.type?.slice(1),
             },
             {
               type: "OneCell",
-              H1: "AI Overview",
-              P1: "Reprehenderit et do ut tempor occaecat irure commodo dolore ipsum qui aliquip do ad. Cupidatat ipsum eu deserunt voluptate dolor magna ut quis sunt do. Irure elit veniam duis qui et. In excepteur Lorem excepteur ex ex ipsum in. Et minim Lorem officia culpa eu veniam Lorem sint aliquip do.",
+              H1: "Overview (Supervisor)",
+              P1: data.overview0,
+            },
+            {
+              type: "OneCell",
+              H1: "Overview (AI)",
+              P1: data.overview1,
             },
             {
               type: "OneCell",
               H1: "Cold Call Script",
-              P1: "Reprehenderit et do ut tempor occaecat irure commodo dolore ipsum qui aliquip do ad. Cupidatat ipsum eu deserunt voluptate dolor magna ut quis sunt do. Irure elit veniam duis qui et. In excepteur Lorem excepteur ex ex ipsum in. Et minim Lorem officia culpa eu veniam Lorem sint aliquip do.",
+              P1: data.cold_call,
             },
             {
               type: "OneCell",
               H1: "Email Script",
-              P1: "Reprehenderit et do ut tempor occaecat irure commodo dolore ipsum qui aliquip do ad. Cupidatat ipsum eu deserunt voluptate dolor magna ut quis sunt do. Irure elit veniam duis qui et. In excepteur Lorem excepteur ex ex ipsum in. Et minim Lorem officia culpa eu veniam Lorem sint aliquip do.",
+              P1: data.cold_email,
             },
           ].map((obj_) => {
             if (obj_.type == "twoCell") {
@@ -106,40 +150,52 @@ const Archive_ = ({}: Archive_Props) => {
             <div
               className={`w-full h-[100px] flex flex-row justify-between items-center`}
             >
-              <div
-                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+              {data.attachments?.map((obj__) => {
+                return (
+                  <div
+                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-[178px] mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+                key={obj__}
               />
-              <div
-                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
-              />
-              <div
-                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
-              />
-              <div
-                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
-              />
+                )
+                })}
+              
             </div>
           </div>
         </div>
         <div
-          className={`w-[800px] min-h-[200px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[3px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
+          className={`w-[800px] min-h-[100px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[3px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
           onClick={() => {
             // setAddOn_(true);
           }}
         >
           <div
-            className={`absolute top-0 left-0 rounded-[4px] shadow-md p-4 w-full h-full`}
+            className={`absolute top-0 left-0 rounded-[4px] shadow-md p-4 px-8 w-full h-full`}
+          >
+            <div
+            className={`w-full h-[100px]`}
           >
             <textarea
               className={`_inter text-[15px] text-start w-full h-full bg-transparent font-thin text-black/50`}
-              placeholder="Add notes to this.."
-              onChange={(obj_) => {}}
+              placeholder="Add a note to this.."
+              onChange={(obj_) => {
+                setPrompt_(obj_.target.value)
+              }}
             />
+            </div>
           </div>
           <div
             className={`absolute right-3 bottom-3 rounded-[4px] shadow-md w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer text-white transition-all duration-500 bg-red-600`}
+            onClick={() => {
+              // const ts_ = new Date().getTime()
+              // // console.log(ts_)
+              // const date = new Date(ts_);
+              // const date2 = new Date(data.created.seconds).toUTCString();
+              // console.log(date2);
+              // console.log(date.toUTCString(), date2.toUTCString());
+              handleSubmit(prompt_)
+            }}
           >
-            Add Note
+            Process
           </div>
         </div>
       </div>
@@ -149,9 +205,11 @@ const Archive_ = ({}: Archive_Props) => {
 
 export default Archive_;
 
-interface Lead_Props {}
+interface Lead_Props {
+  data: any;
+}
 
-const Lead_ = ({}: Lead_Props) => {
+const Lead_ = ({ data }: Lead_Props) => {
   const [email_, setEmail_] = useState("");
   const [phone_, setPhone_] = useState("");
   const [website_, setWebsite_] = useState("");
@@ -159,11 +217,19 @@ const Lead_ = ({}: Lead_Props) => {
   const [twitter_, setTwitter_] = useState("");
   const [instagram_, setInstagram_] = useState("");
 
-  console.log(useAuth());
+  const date_ = new Date(data.created?.seconds).toUTCString();
+
+  // console.log(useAuth());
+
+  // console.log(
+  //   data.name?.toUpperCase().split(' ').map((obj_) => {
+  //     return obj_[0]
+  //   }).join('')
+  // )
 
   return (
     <div
-      className={`w-[800px] h-[180px] mt-2 bg-black/5 opacity-90 rounded-[4px] flex flex-col justify-center items-center p-6 px-14 relative overflow-visible mb-5 shadow-`}
+      className={`w-[800px] h-[180px] mt-2 bg-black/5 opacity-90 rounded-[4px] flex flex-col justify-center items-center p-6 px-14 relative overflow-visible mb-5 cursor-default duration-200 transition-all`}
     >
       <div
         className={`w-full h-full flex flex-col justify-center items-center absolute top-0 rounded-[4px]`}
@@ -173,12 +239,20 @@ const Lead_ = ({}: Lead_Props) => {
           className={`w-full h-full object-cover opacity-20 rounded-[4px]`}
         />
         <div
-          className={`w-full h-full absolute transition-all redAir rounded-[4px]`}
+          className={`w-full h-full absolute transition-all ${
+            data.status ? "greenAir" : "redAir"
+          } rounded-[4px]`}
         >
           <p
             className={`font-black text-[80px] h-full leading-tight text-white/30 absolute left-[30px] -rotate-90`}
           >
-            ITG
+            {data.name
+              ?.toUpperCase()
+              .split(" ")
+              .map((obj_) => {
+                return obj_[0];
+              })
+              .join("")}
           </p>
         </div>
         <div className={`w-full h-full absolute transition-all rounded-[4px]`}>
@@ -188,13 +262,15 @@ const Lead_ = ({}: Lead_Props) => {
             <p
               className={`font-black text-[30px] leading-tight text-black/70 tracking-tight relative top-2 right-[100px] mix-blend-multiply`}
             >
-              IVORY TOWER GROUP
+              {data.name?.toUpperCase()}
             </p>
           </div>
         </div>
       </div>
       <div
-        className={`w-[50%] h-[50%] bg-red-600 ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
+        className={`w-[50%] h-[50%] ${
+          data.status ? "bg-green-600" : "bg-red-600"
+        } ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
       >
         {/* <div
               className={`flex flex-row items-center justify-start w-[50%] h-full mt-auto`}
@@ -231,7 +307,9 @@ const Lead_ = ({}: Lead_Props) => {
       </div>
 
       <div
-        className={`w-[50%] h-[50%] bg-red-600 ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
+        className={`w-[50%] h-[50%] ${
+          data.status ? "bg-green-600" : "bg-red-600"
+        } ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
       >
         {/* <div
               className={`flex flex-row items-center justify-start w-[50%] h-full mt-auto`}
@@ -268,7 +346,9 @@ const Lead_ = ({}: Lead_Props) => {
       </div>
 
       <div
-        className={`w-[50%] h-[50%] bg-red-600 ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
+        className={`w-[50%] h-[50%] ${
+          data.status ? "bg-green-600" : "bg-red-600"
+        } ml-auto mr-[80px] flex flex-row justify-start items-center my-2`}
       >
         {/* <div
               className={`flex flex-row items-center justify-start w-[50%] h-full mt-auto`}
@@ -326,13 +406,23 @@ const Lead_ = ({}: Lead_Props) => {
           className={`text-[13px] text-black/60 -rotate-90 w-[180px] text-center relative right-[30px]`}
         >
           <p className={`font-black text-[37px] text-black/80 relative top-2`}>
-            13:00
+            {date_?.split(" ")[4]?.substring(0, 5)}
           </p>{" "}
-          20 Mar, Fri 2023
+          {
+            date_.split(" ")[1]
+          }
+          {" "}
+          {
+            date_.split(" ")[2]
+          }, {
+            date_.split(" ")[0].substring(0, 3)
+          } {
+            date_.split(" ")[3]
+          }
           <p
             className={`text-[13px] font-bold leading-tight text-black/50 tracking-tight`}
           >
-            LWAZI NDLOVU
+            {data.author?.toUpperCase()}
           </p>
         </p>
       </div>
@@ -360,7 +450,7 @@ interface TwoCell_Props {
 const TwoCell_ = ({ H1, H2, P1, P2 }: TwoCell_Props) => {
   return (
     <div
-      className={`w-[68%] h-[50px] flex flex-row ml-auto mr-10 justify-center items-center`}
+      className={`w-[68%] h-[50px] flex flex-row ml-auto mr-12 justify-center items-center`}
     >
       <div
         className={`w-full h-full flex flex-col justify-center items-start pl-8`}
@@ -386,7 +476,7 @@ interface OneCell_Props {
 const OneCell_ = ({ H1, P1 }: OneCell_Props) => {
   return (
     <div
-      className={`w-full h-[50px] flex flex-row justify-center items-center mt-6 mb-4`}
+      className={`w-full min-h-[50px] flex flex-row justify-center items-center my-2`}
     >
       <div
         className={`w-full h-full flex flex-col justify-center items-start px-8`}

@@ -73,6 +73,24 @@ const createResume_ = (data_: any) => {
   });
 };
 
+const getLead = async (data_: any) => {
+  const collection_ = collection(db, `leads`);
+  const lead_ = doc(collection_, data_);
+
+  try {
+    const docSnapshot = await getDoc(lead_);
+    if (docSnapshot.exists()) {
+      return docSnapshot.data();
+    } else {
+      console.log('Document does not exist');
+      throw new Error('Document does not exist');
+    }
+  } catch (error) {
+    console.error('Error getting document:', error);
+    throw new Error('Error getting document');
+  }
+};
+
 const getResume = async (data_: any) => {
   const collection_ = collection(db, `resumes`);
   const resume_ = doc(collection_, data_);
@@ -114,6 +132,7 @@ export {
   store,
   auth,
   getResume,
+  getLead,
   checkUp_,
   signUp_,
   signIn_,
