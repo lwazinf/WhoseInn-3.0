@@ -17,6 +17,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { checkUp_, signIn_, useAuth } from "../../Firebase";
+import QRCode from "react-qr-code";
 
 interface Archive_Props {}
 
@@ -32,11 +33,15 @@ const Archive_ = ({}: Archive_Props) => {
           return <Lead_ />;
         })}
         <div
-          className={`w-[800px] min-h-[400px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[3px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
+          className={`w-[800px] min-h-[400px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[4px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
           onClick={() => {
             // setAddOn_(true);
           }}
         >
+          <QRCode
+            className={`w-[185px] h-[185px] absolute top-6 left-8 mix-blend-multiply`}
+            value={"IVORY TOWER GROUP"}
+          />
           {[
             {
               type: "twoCell",
@@ -90,6 +95,31 @@ const Archive_ = ({}: Archive_Props) => {
               return <OneCell_ H1={obj_.H1} P1={obj_.P1} />;
             }
           })}
+          <div
+            className={`w-[93%] min-h-[100px] flex flex-col justify-center items-center mt-3`}
+          >
+            <p
+              className={`_Inter text-[14px] text-black font-black w-full text-left ml-1 mb-1`}
+            >
+              Attachments
+            </p>
+            <div
+              className={`w-full h-[100px] flex flex-row justify-between items-center`}
+            >
+              <div
+                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+              />
+              <div
+                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+              />
+              <div
+                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+              />
+              <div
+                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-full mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+              />
+            </div>
+          </div>
         </div>
         <div
           className={`w-[800px] min-h-[200px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[3px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
@@ -97,15 +127,20 @@ const Archive_ = ({}: Archive_Props) => {
             // setAddOn_(true);
           }}
         >
-          <div className={`absolute top-0 left-0 rounded-[4px] shadow-md p-4 w-full h-full`}>
-          <textarea
-                  className={`_inter text-[15px] text-start w-full h-full bg-transparent font-thin text-black/50`}
-                  placeholder="Add notes to this.."
-                  onChange={(obj_) => {
-                  }}
-                />
-                </div>
-          <div className={`absolute right-3 bottom-3 rounded-[4px] shadow-md bg-white w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer`}>Note</div>
+          <div
+            className={`absolute top-0 left-0 rounded-[4px] shadow-md p-4 w-full h-full`}
+          >
+            <textarea
+              className={`_inter text-[15px] text-start w-full h-full bg-transparent font-thin text-black/50`}
+              placeholder="Add notes to this.."
+              onChange={(obj_) => {}}
+            />
+          </div>
+          <div
+            className={`absolute right-3 bottom-3 rounded-[4px] shadow-md w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer text-white transition-all duration-500 bg-red-600`}
+          >
+            Add Note
+          </div>
         </div>
       </div>
     </div>
@@ -128,7 +163,7 @@ const Lead_ = ({}: Lead_Props) => {
 
   return (
     <div
-      className={`w-[800px] h-[180px] mt-2 bg-black/5 opacity-90 rounded-[4px] flex flex-col justify-center items-center p-6 px-14 relative overflow-visible mb-5 shadow-md cursor-pointer`}
+      className={`w-[800px] h-[180px] mt-2 bg-black/5 opacity-90 rounded-[4px] flex flex-col justify-center items-center p-6 px-14 relative overflow-visible mb-5 shadow-`}
     >
       <div
         className={`w-full h-full flex flex-col justify-center items-center absolute top-0 rounded-[4px]`}
@@ -325,7 +360,7 @@ interface TwoCell_Props {
 const TwoCell_ = ({ H1, H2, P1, P2 }: TwoCell_Props) => {
   return (
     <div
-      className={`w-full h-[50px] flex flex-row justify-center items-center`}
+      className={`w-[68%] h-[50px] flex flex-row ml-auto mr-10 justify-center items-center`}
     >
       <div
         className={`w-full h-full flex flex-col justify-center items-start pl-8`}

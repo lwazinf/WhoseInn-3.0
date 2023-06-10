@@ -20,6 +20,7 @@
     "puppeteer": "^20.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-qr-code": "^2.0.11",
     "react-usestateref": "^1.0.8",
     "recoil": "^0.7.7",
     "uuidv4": "^6.2.13"

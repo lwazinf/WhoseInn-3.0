@@ -30,6 +30,16 @@
     font-family: 'Oswald', sans-serif;
   }
 
+  ._snap {
+    height: 100vh; /* Set the height of the container */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    scroll-snap-type: y mandatory; /* Enable mandatory snap scrolling on the vertical axis */
+  }
+
+  ._assist {
+    scroll-snap-align: center;
+  }
+
   .redAir {
     background: rgb(138,8,8);
     background: -moz-linear-gradient(11deg, rgba(138,8,8,0.556442645417542) 0%, rgba(33,29,29,0) 51%);

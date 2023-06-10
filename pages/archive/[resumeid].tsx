@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { getResume } from "../../Firebase";
 import { useEffect, useState } from "react";
 import Script_ from "../../components/pages/Script_";
+import Archive_ from "../../components/pages/Archive_";
+import SideMenu_ from "../../components/SideMenu_";
 
 interface ResumeDetail_Props {}
 
@@ -31,8 +33,9 @@ const ResumeDetail_ = ({}: ResumeDetail_Props) => {
     <div className={``}>
       <title>{router.query.resumeid}</title>
       {router.query.resumeid != null && (
-        <Script_ docLock_={true} docData_={data_} />
-      )}
+        <Archive_ />
+        )}
+        <SideMenu_ />
     </div>
   );
 };

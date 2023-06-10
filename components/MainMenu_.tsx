@@ -38,11 +38,11 @@ const MainMenu_ = ({}: MainMenu_Props) => {
   const router = useRouter();
   const { query: _data } = router;
 
-  const q = router.query
+  const q = router.query;
 
   useEffect(() => {
-    setMT_(false)
-  }, [q])
+    setMT_(false);
+  }, [q]);
 
   return (
     <div
@@ -53,7 +53,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
       <div
         className={`flex flex-col w-full min-h-[30px] justify-center items-center absolute bottom-6`}
       >
-        <div
+        {/* <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
           onMouseLeave={() => {
             setMHI_("");
@@ -106,7 +106,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
           {nN_.includes("Podcasts" as never) ? <NewNotif_ /> : <div />}
-        </div>
+        </div> */}
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
           onMouseLeave={() => {
@@ -115,14 +115,19 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           onMouseEnter={() => {
             setMHI_("Archive");
           }}
-          onClick={() => {if (mTI_ == "Archive") {
-              router.push('/archive');
-              setMT_(false);
-              setMTI_(router.pathname.replace('/', '').charAt(0).toUpperCase() + router.pathname.replace('/', '').slice(1));
-            } else {
-              setMT_(true);
-              setMTI_("Archive");
-            }
+          onClick={() => {
+            router.push("/archive");
+            // if (mTI_ == "Archive") {
+            //   router.push("/archive");
+            //   setMT_(false);
+            //   setMTI_(
+            //     router.pathname.replace("/", "").charAt(0).toUpperCase() +
+            //       router.pathname.replace("/", "").slice(1)
+            //   );
+            // } else {
+            //   setMT_(true);
+            //   setMTI_("Archive");
+            // }
           }}
         >
           <FontAwesomeIcon
@@ -133,7 +138,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
           />
           {nN_.includes("Archive" as never) ? <NewNotif_ /> : <div />}
         </div>
-        <div
+        {/* <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
           onMouseLeave={() => {
             setMHI_("");
@@ -156,7 +161,7 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
           {cV_.length > 0 ? <NewNotifAlt_ /> : <div />}
-        </div>
+        </div> */}
 
         <div className={`w-[50px] h-[1px] bg-black/20 my-4`} />
 
