@@ -12,26 +12,38 @@ import {
   faPhone,
   faRobot,
   faTractor,
+  faTrash,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { checkUp_, signIn_, useAuth } from "../../Firebase";
+import { checkUp_, db, signIn_, useAuth } from "../../Firebase";
 import QRCode from "react-qr-code";
+import { doc, updateDoc } from "firebase/firestore";
+import { uuid } from "uuidv4";
 
 interface Archive_Props {
   data: any;
 }
 
 const Archive_ = ({ data }: Archive_Props) => {
-  const [prompt_, setPrompt_] = useState('')
-  async function handleSubmit (data__: any) {
+  const [prompt_, setPrompt_] = useState("");
+  const update_ = async (dataUpdate: any) => {
+    const documentRef = doc(db, "leads", data.uid);
+    try {
+      await updateDoc(documentRef, dataUpdate);
+      console.log("Document successfully updated!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+  async function handleSubmit(data__: any) {
     if (data__) {
       // try {
       //   setQuote("");
       //   setQuoteLoadingError(false);
       //   setQuoteLoading(true);
-      try{
+      try {
         const response = await fetch(
           "/api/chatGPT?prompt=" + encodeURIComponent(data__)
         );
@@ -45,6 +57,57 @@ const Archive_ = ({ data }: Archive_Props) => {
       }
     }
   }
+
+  const defaultData = [
+    {
+      type: "twoCell",
+      H1: "Company Name",
+      H2: "Email",
+      P1: data.name,
+      P2: data.email,
+    },
+    {
+      type: "twoCell",
+      H1: "Website",
+      H2: "Number",
+      P1: "https://" + data.website,
+      P2: data.phone,
+    },
+    {
+      type: "twoCell",
+      H1: "Category",
+      H2: "Locations",
+      P1: data.category?.charAt(0).toUpperCase() + data.category?.slice(1),
+      P2: data.locations?.join(", "),
+    },
+    {
+      type: "twoCell",
+      H1: "Industry",
+      H2: "Type",
+      P1: data.industry?.charAt(0).toUpperCase() + data.industry?.slice(1),
+      P2: data.type?.charAt(0).toUpperCase() + data.type?.slice(1),
+    },
+    {
+      type: "OneCell",
+      H1: "Overview (Supervisor)",
+      P1: data.overview0,
+    },
+    {
+      type: "OneCell",
+      H1: "Overview (AI)",
+      P1: data.overview1,
+    },
+    {
+      type: "OneCell",
+      H1: "Cold Call Script",
+      P1: data.cold_call,
+    },
+    {
+      type: "OneCell",
+      H1: "Email Script",
+      P1: data.cold_email,
+    },
+  ];
   return (
     <div
       className={`w-full min-h-2 flex flex-row justify-center items-start relative mb-12`}
@@ -53,84 +116,35 @@ const Archive_ = ({ data }: Archive_Props) => {
         className={`min-w-[120px] min-h-2 bg-white/90 rounded-[4px] shadow-lg flex flex-col justify-start items-center p-3 pt-8 mt-8 relative transition-all duration-[400ms]`}
       >
         <div
-      className={`duration-[200ms] transition-all ${
-        data ? 'opacity-100' : 'opacity-0'
-      }`}
-    >
-        {[1].map((obj_) => {
-          return <Lead_ data={data} />;
-        })}
+          className={`duration-[200ms] transition-all ${
+            data ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {[1].map((obj_) => {
+            return <Lead_ data={data} />;
+          })}
         </div>
         <div
           className={`w-[800px] min-h-[400px] ${
-            data ? 'opacity-50' : 'opacity-0'
+            data ? "opacity-50" : "opacity-0"
           } mt-2 pt-4 pb-4 bg-black/5 rounded-[4px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-[800ms] hover:duration-200`}
           onClick={() => {
             // setAddOn_(true);
           }}
         >
           <div
-      className={`duration-[200ms] transition-all ${
-        data ? 'opacity-100' : 'opacity-0'
-      }`}
-    >
-          {
-            data && <QRCode
-            className={`w-[185px] h-[185px] absolute top-6 left-8 mix-blend-multiply`}
-            value={'http://ofscript.ai/archive/'+data.uid}
-          />
-          }
+            className={`duration-[200ms] transition-all ${
+              data ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {data && (
+              <QRCode
+                className={`w-[185px] h-[185px] absolute top-6 left-8 mix-blend-multiply`}
+                value={"http://ofscript.ai/archive/" + data.uid}
+              />
+            )}
           </div>
-          {[
-            {
-              type: "twoCell",
-              H1: "Company Name",
-              H2: "Email",
-              P1: data.name,
-              P2: data.email,
-            },
-            {
-              type: "twoCell",
-              H1: "Website",
-              H2: "Number",
-              P1: "https://"+data.website,
-              P2: data.phone,
-            },
-            {
-              type: "twoCell",
-              H1: "Category",
-              H2: "Locations",
-              P1: data.category?.charAt(0).toUpperCase() + data.category?.slice(1),
-              P2: data.locations?.join(', '),
-            },
-            {
-              type: "twoCell",
-              H1: "Industry",
-              H2: "Type",
-              P1: data.industry?.charAt(0).toUpperCase() + data.industry?.slice(1),
-              P2: data.type?.charAt(0).toUpperCase() + data.type?.slice(1),
-            },
-            {
-              type: "OneCell",
-              H1: "Overview (Supervisor)",
-              P1: data.overview0,
-            },
-            {
-              type: "OneCell",
-              H1: "Overview (AI)",
-              P1: data.overview1,
-            },
-            {
-              type: "OneCell",
-              H1: "Cold Call Script",
-              P1: data.cold_call,
-            },
-            {
-              type: "OneCell",
-              H1: "Email Script",
-              P1: data.cold_email,
-            },
-          ].map((obj_) => {
+          {defaultData.map((obj_) => {
             if (obj_.type == "twoCell") {
               return (
                 <TwoCell_ H1={obj_.H1} H2={obj_.H2} P1={obj_.P1} P2={obj_.P2} />
@@ -140,7 +154,7 @@ const Archive_ = ({ data }: Archive_Props) => {
             }
           })}
           <div
-            className={`w-[93%] min-h-[100px] flex flex-col justify-center items-center mt-3`}
+            className={`w-[93%] min-h-[100px] flex flex-col justify-center items-center my-3`}
           >
             <p
               className={`_Inter text-[14px] text-black font-black w-full text-left ml-1 mb-1`}
@@ -153,14 +167,25 @@ const Archive_ = ({ data }: Archive_Props) => {
               {data.attachments?.map((obj__) => {
                 return (
                   <div
-                className={`flex flex-row justify-center items-center rounded-[3px] h-full w-[178px] mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
-                key={obj__}
-              />
-                )
-                })}
-              
+                    className={`flex flex-row justify-center items-center rounded-[3px] h-full w-[178px] mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
+                    key={obj__}
+                  />
+                );
+              })}
             </div>
           </div>
+        </div>
+        <div
+          className={`w-[800px] min-h-[20px] ${
+            data ? "opacity-50" : "opacity-0"
+          } mt-2 pt-4 pb-4 bg-black/0 rounded-[4px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-[800ms] hover:duration-200`}
+          onClick={() => {
+            // setAddOn_(true);
+          }}
+        >
+          {data.content?.map((obj_) => {
+            return <NoteCell_ data={data} uid={obj_.uid} H0={obj_.H0} H1={obj_.H1} P1={obj_.P1} />;
+          })}
         </div>
         <div
           className={`w-[800px] min-h-[100px] mt-2 pt-4 pb-4 bg-black/5 opacity-50 rounded-[3px] flex flex-col justify-start items-center relative overflow-hidden transition-all duration-400 hover:duration-200`}
@@ -171,28 +196,38 @@ const Archive_ = ({ data }: Archive_Props) => {
           <div
             className={`absolute top-0 left-0 rounded-[4px] shadow-md p-4 px-8 w-full h-full`}
           >
-            <div
-            className={`w-full h-[100px]`}
-          >
-            <textarea
-              className={`_inter text-[15px] text-start w-full h-full bg-transparent font-thin text-black/50`}
-              placeholder="Add a note to this.."
-              onChange={(obj_) => {
-                setPrompt_(obj_.target.value)
-              }}
-            />
+            <div className={`w-full h-[100px]`}>
+              <textarea
+                className={`_inter text-[15px] text-start w-full h-full bg-transparent font-thin text-black/50 mt-2`}
+                placeholder="Add a note to this.."
+                onChange={(obj_) => {
+                  setPrompt_(obj_.target.value);
+                }}
+              />
             </div>
           </div>
           <div
             className={`absolute right-3 bottom-3 rounded-[4px] shadow-md w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer text-white transition-all duration-500 bg-red-600`}
             onClick={() => {
-              // const ts_ = new Date().getTime()
-              // // console.log(ts_)
-              // const date = new Date(ts_);
-              // const date2 = new Date(data.created.seconds).toUTCString();
-              // console.log(date2);
-              // console.log(date.toUTCString(), date2.toUTCString());
-              handleSubmit(prompt_)
+              const currentDate = new Date();
+const sastOffset = 4 * 60; // Offset in minutes
+
+currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset() + sastOffset);
+const sastTimeString = currentDate.toUTCString();
+
+console.log(sastTimeString.slice(0, 22));
+              // handleSubmit(prompt_)
+              const content_ = data.content
+              data.content = [...content_, ...[
+                {
+                  type: "OneCell",
+                  H0: sastTimeString,
+                  H1: prompt_,
+                  P1: "nt date and time to connect, and I will ensure our discussion is both engaging and valuable. I look forward to the possibility of collaborating with [Construction Company Name] and driving unparalleled success together.",
+                  uid: uuid()
+                },
+              ]];
+              update_(data);
             }}
           >
             Process
@@ -408,17 +443,8 @@ const Lead_ = ({ data }: Lead_Props) => {
           <p className={`font-black text-[37px] text-black/80 relative top-2`}>
             {date_?.split(" ")[4]?.substring(0, 5)}
           </p>{" "}
-          {
-            date_.split(" ")[1]
-          }
-          {" "}
-          {
-            date_.split(" ")[2]
-          }, {
-            date_.split(" ")[0].substring(0, 3)
-          } {
-            date_.split(" ")[3]
-          }
+          {date_.split(" ")[1]} {date_.split(" ")[2]},{" "}
+          {date_.split(" ")[0].substring(0, 3)} {date_.split(" ")[3]}
           <p
             className={`text-[13px] font-bold leading-tight text-black/50 tracking-tight`}
           >
@@ -483,6 +509,72 @@ const OneCell_ = ({ H1, P1 }: OneCell_Props) => {
       >
         <p className={`_Inter text-[14px] text-black font-black`}>{H1}</p>
         <p className={`_Inter text-[13px] text-black/50 text-left`}>{P1}</p>
+      </div>
+    </div>
+  );
+};
+
+interface NoteCell_Props {
+  H0: string;
+  H1: string;
+  P1: string;
+  uid: string;
+  data: any;
+}
+
+const NoteCell_ = ({ H0, H1, P1, uid, data }: NoteCell_Props) => {
+  const update_ = async (dataUpdate: any) => {
+    const documentRef = doc(db, "leads", data.uid);
+    try {
+      await updateDoc(documentRef, dataUpdate);
+      console.log("Document successfully updated!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+  return (
+    <div
+      className={`w-full min-h-[50px] flex flex-row justify-center items-center my-2`}
+    >
+      <div
+        className={`w-full h-full flex flex-col justify-center items-start px-8`}
+      >
+        <p
+          className={`_Inter w-full flex flex-row text-[13px] italic text-black mb-2 ml-[-15px]`}
+        >
+          {H0.slice(0, 22)}{" "}
+          <p className={`_Inter text-[13px] italic text-black/50 ml-1`}>
+            - Lwazi Ndlovu
+          </p>
+          <FontAwesomeIcon
+            icon={faTrash}
+            className={`h-[13px] w-[13px] ml-2 mt-1 text-red-600/50 hover:text-red-600 cursor-pointer transition-all duration-[400ms]`}
+            onClick={() => {
+              console.log(data.content.filter((obj_) => {
+                return obj_.uid != uid
+              }))
+
+              data.content = data.content.filter((obj_) => {
+                return obj_.uid != uid
+              })
+              update_(data);
+            }}
+          />
+        </p>
+        <p className={`_Inter text-[14px] text-black font-black`}>
+          <FontAwesomeIcon
+            icon={faUser}
+            className={`h-[15px] w-[15px] mr-2 text-red-600/50 transition-all duration-[400ms]`}
+          />{" "}
+          {H1}
+        </p>
+        <p className={`_Inter text-[13px] text-black/50 text-left`}>
+          <FontAwesomeIcon
+            icon={faRobot}
+            className={`h-[15px] w-[15px] mr-2 text-red-600/50 transition-all duration-[400ms]`}
+          />{" "}
+          {P1}
+        </p>
       </div>
     </div>
   );
