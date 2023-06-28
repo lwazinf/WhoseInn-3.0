@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { MenuHoverItem } from "./atoms/atoms";
+import { MenuHoverItem } from "../atoms/atoms";
 
 interface NavNotif_Props {
   data: Array<string>,

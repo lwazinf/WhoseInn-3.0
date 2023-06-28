@@ -1,6 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Configuration, OpenAIApi } from 'openai';
-import { useState } from 'react';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -23,6 +22,7 @@ export default async function handler(
   }
 
   try {
+
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: promptText,
@@ -32,13 +32,15 @@ export default async function handler(
       frequency_penalty: 0,
       top_p: 1.0,
     });
-
-    const quote = completion.data.choices[0] ? completion.data.choices[0].text.trim() : '';
-    console.log(quote);
+    
+    
+    const quote = completion.data.choices[0]
+    ? completion.data.choices[0].text?.trim()
+    : "";
 
     res.status(200).json({ quote });
   } catch (error) {
-    console.error('Error fetching quote:', error);
-    res.status(500).json({ error: 'Failed to fetch quote' });
+    console.error("Error fetching quote:", error);
+    res.status(500).json({ error: "Failed to fetch quote" });
   }
 }

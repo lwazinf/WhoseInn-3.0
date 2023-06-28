@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
-import { MenuTray, MenuTrayItem } from "./atoms/atoms";
-import { Archive_ } from "./ui/Archive_";
+import { MenuTray, MenuTrayItem } from "../atoms/atoms";
+import { Archive_ } from "../ui/Archive_";
 
 interface SecondMenu_Props {}
 

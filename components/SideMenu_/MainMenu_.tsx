@@ -4,11 +4,8 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import {
-  faCommenting,
   faFileArrowDown,
-  faHeadphones,
-  faPeopleGroup,
-  faPerson,
+  faWaveSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import {
@@ -18,9 +15,9 @@ import {
   MenuTray,
   MenuTrayItem,
   NewNotif,
-} from "../components/atoms/atoms";
+} from "../atoms/atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NewNotif_, { NewNotifAlt_ } from "./NewNotif_";
+import NewNotif_ from "./NewNotif_";
 import Branding_ from "./Branding_";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -53,6 +50,34 @@ const MainMenu_ = ({}: MainMenu_Props) => {
       <div
         className={`flex flex-col w-full min-h-[30px] justify-center items-center absolute bottom-6`}
       >
+        
+        <div
+          className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
+          onMouseLeave={() => {
+            setMHI_("");
+          }}
+          onMouseEnter={() => {
+            setMHI_("Narrate");
+          }}
+          onClick={() => {
+            if (mTI_ == "Narrate") {
+              router.push("/narrate");
+              setMT_(false);
+              setMTI_("Narrate");
+            } else {
+              setMT_(true);
+              setMTI_("Narrate");
+            }
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faWaveSquare}
+            className={`h-[21px] w-[21px] ${
+              mTI_ == "Narrate" ? "text-black/60" : "text-black/30"
+            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
+          />
+          {nN_.includes("Narrate" as never) ? <NewNotif_ /> : <div />}
+        </div>
         {/* <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
           onMouseLeave={() => {
@@ -62,14 +87,16 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             setMHI_("Script");
           }}
           onClick={() => {
-            
-            if(router.pathname.replace('/', '').charAt(0).toUpperCase() + router.pathname.replace('/', '').slice(1) != 'Script'){
+            if (
+              router.pathname.replace("/", "").charAt(0).toUpperCase() +
+                router.pathname.replace("/", "").slice(1) !=
+              "Script"
+            ) {
               setMTI_("Script");
-            router.push('/script');
-            }else{
+              router.push("/script");
+            } else {
               setMT_(!mT_);
             }
-            
           }}
         >
           <FontAwesomeIcon
@@ -79,33 +106,6 @@ const MainMenu_ = ({}: MainMenu_Props) => {
             } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
           />
           {nN_.includes("Script" as never) ? <NewNotif_ /> : <div />}
-        </div>
-        <div
-          className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}
-          onMouseLeave={() => {
-            setMHI_("");
-          }}
-          onMouseEnter={() => {
-            setMHI_("Podcasts");
-          }}
-          onClick={() => {
-            if (mTI_ == "Podcasts") {
-              router.push('/podcasts');
-              setMT_(false);
-              setMTI_("Podcasts");
-            } else {
-              setMT_(true);
-              setMTI_("Podcasts");
-            }
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faHeadphones}
-            className={`h-[21px] w-[21px] ${
-              mTI_ == "Podcasts" ? "text-black/60" : "text-black/30"
-            } hover:text-black/60 transition-all duration-[400ms] cursor-pointer`}
-          />
-          {nN_.includes("Podcasts" as never) ? <NewNotif_ /> : <div />}
         </div> */}
         <div
           className={`min-h-[25px] min-w-[25px] m-2 relative flex justify-center items-center`}

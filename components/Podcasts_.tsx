@@ -1,9 +1,9 @@
 import { useState } from "react";
-import TextToSpeech from "../ui/TTS_";
+import TextToSpeech from "./ui/TTS_";
 
-interface Podcasts_Props {}
+interface Narrate_Props {}
 
-const Podcasts_ = ({}: Podcasts_Props) => {
+const Narrate_ = ({}: Narrate_Props) => {
   const [h1Value, setH1Value] = useState("");
   const [promptText, setPromptText] = useState("");
   const [generatedText, setGeneratedText] = useState("");
@@ -45,10 +45,10 @@ const Podcasts_ = ({}: Podcasts_Props) => {
   return (
     <div className="w-full min-h-[200px] flex flex-row justify-center items-center relative mb-12">
       <div className="w-[1200px] min-h-[800px] bg-white/90 flex flex-col justify-start items-center rounded-[6px] shadow-md p-10 mt-8 relative">
-          <TextToSpeech/>
+          
       </div>
     </div>
   );
 };
 
-export default Podcasts_;
+export default Narrate_;

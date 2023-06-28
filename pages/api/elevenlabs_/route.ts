@@ -24,8 +24,6 @@ export async function POST(request) {
       }
     );
 
-    console.log(response)
-
     if (!response.ok) {
       throw new Error("Something went wrong");
     }

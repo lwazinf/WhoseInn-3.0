@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { CartTray } from "./atoms/atoms";
+import { CartTray } from "../atoms/atoms";
 
 interface ThirdMenu_Props {}
 

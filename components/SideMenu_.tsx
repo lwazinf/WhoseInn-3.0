@@ -1,6 +1,6 @@
-import FirstMenu_ from "./FirstMenu_";
-import SecondMenu_ from "./SecondMenu_";
-import ThirdMenu_ from "./ThirdMenu_";
+import FirstMenu_ from "./SideMenu_/FirstMenu_";
+import SecondMenu_ from "./SideMenu_/SecondMenu_";
+import ThirdMenu_ from "./SideMenu_/ThirdMenu_";
 
 interface SideMenu_Props {}
 

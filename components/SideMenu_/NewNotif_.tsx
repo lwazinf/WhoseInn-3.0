@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { CartValue } from "./atoms/atoms";
+import { CartValue } from "../atoms/atoms";
 
 interface NewNotif_Props {
     

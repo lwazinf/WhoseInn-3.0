@@ -8,15 +8,9 @@ import {
   faAngleLeft,
   faAngleRight,
   faAt,
-  faBookmark,
-  faFilePdf,
-  faFloppyDisk,
   faGlobeAfrica,
-  faPerson,
   faPhone,
   faRobot,
-  faShare,
-  faShareAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
@@ -24,16 +18,15 @@ import { useRecoilState } from "recoil";
 import {
   AddOn,
   DataState,
-  Images,
   MenuTray,
   ScriptObjects,
-} from "../atoms/atoms";
-import Profiles_ from "../ui/Profiles_";
-import Image_ from "../ui/Image_";
-import Video_ from "../ui/VideoPlayer_";
-import Label_ from "../ui/Label_";
+} from "./atoms/atoms";
+import Profiles_ from "./ui/Profiles_";
+import Image_ from "./ui/Image_";
+import Video_ from "./ui/VideoPlayer_";
+import Label_ from "./ui/Label_";
 import { uuid } from "uuidv4";
-import { createResume_, getResume, uploadImage } from "../../Firebase";
+import { uploadImage } from "./../Firebase";
 
 interface Script_Props {
   docData_: any;

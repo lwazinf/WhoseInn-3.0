@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { MenuTray, MenuTrayItem } from "./atoms/atoms";
+import { MenuTray, MenuTrayItem } from "../atoms/atoms";
 import { useState } from "react";
 import { useRouter } from "next/router";
 

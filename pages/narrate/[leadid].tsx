@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import { getLead } from "../../Firebase";
 import { useEffect, useState } from "react";
+import Script_ from "../../components/pages/Script_";
 import Archive_ from "../../components/Archive_";
+import SideMenu_ from "../../components/SideMenu_";
 
-interface LeadDetail_Props {}
+interface NarrateDetailDetail_Props {}
 
-const LeadDetail_ = ({}: LeadDetail_Props) => {
+const NarrateDetailDetail_ = ({}: NarrateDetailDetail_Props) => {
   const router = useRouter();
   const { query: _data } = router;
   const [data_, setData_] = useState("");
@@ -32,10 +34,10 @@ const LeadDetail_ = ({}: LeadDetail_Props) => {
     <div className={``}>
       <title>{data_.name+" :: "+data_.author}</title>
       {router.query.leadid != null && (
-        <Archive_ data={data_} gptSpin={prePrompt_} />
+        
       )}
     </div>
   );
 };
 
-export default LeadDetail_;
+export default NarrateDetailDetail_;

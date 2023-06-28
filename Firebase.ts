@@ -126,6 +126,22 @@ const uploadImage = async (file: File) => {
 
 // // // // // // // // // //
 
+async function getEmbeddings() {
+  try {
+    const docRef = doc(collection(db, 'embeddings'), 'data');
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      const data = docSnapshot.data();
+      return data.embeddings;
+    }
+  } catch (error) {
+    console.error('Error retrieving embeddings from Firestore:', error);
+  }
+
+  return null;
+}
+
 export {
   db,
   uploadImage,
@@ -139,4 +155,5 @@ export {
   signOut_,
   createResume_,
   useAuth,
+  getEmbeddings
 };

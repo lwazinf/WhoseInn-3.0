@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import SideMenu_ from "../../components/SideMenu_";
-import CenterStage_ from "../../components/pages/CenterStage_";
+import CenterStage_ from "../../components/CenterStage_";
 import { useRecoilState } from "recoil";
 import { AddOn, MenuItem, MenuTrayItem, ScriptObjects } from "../../components/atoms/atoms";
-import Archive_ from "../../components/pages/Archive_";
-import Script_ from "../../components/pages/Script_";
+import Archive_ from "../../components/Archive_";
+import Script_ from "../../components/Script_";
 import { useEffect } from "react";
-import Podcasts_ from "../../components/pages/Podcasts_";
+import Podcasts_ from "../../components/Podcasts_";
 
 const Home: NextPage = () => {
   const [mTI_, setMTI_] = useRecoilState(MenuTrayItem);
@@ -70,7 +70,6 @@ const Home: NextPage = () => {
             }
           </div>
         </div> */}
-        <SideMenu_ />
       </main>
     </div>
   );

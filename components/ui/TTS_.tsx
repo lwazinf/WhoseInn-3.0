@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 
-export default function Home() {
+export default function TextToSpeech_() {
   const voiceRef = useRef();
   const textRef = useRef();
 
@@ -12,8 +12,10 @@ export default function Home() {
 
   // handler functions
   const handleGenerateTTS = async () => {
-    const selectedVoice = voiceRef.current.value;
-    const text = textRef.current.value;
+    const selectedVoice = voiceRef.current?.value;
+    const text = textRef.current?.value;
+
+    // console.log(text, selectedVoice)
 
     setLoading(true);
     try {
@@ -34,6 +36,7 @@ export default function Home() {
       });
 
       if (!response.ok) {
+        console.log(response)
         throw new Error("Something went wrong");
       }
 

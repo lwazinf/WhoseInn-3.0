@@ -27,7 +27,7 @@ export const DataState = atom({
   default: "",
 });
 
-export const TagInfo = atom({
+export const TagInfo = atom<any>({
   key: `${COMPONENT_NAME}/TagInfo`,
   default: {image: "https://images.pexels.com/photos/2646237/pexels-photo-2646237.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", grid: ['', '', '', '']},
 });
@@ -42,8 +42,28 @@ export const CurrentID = atom({
   default: '',
 });
 
+export const mapObjectAtom = atom<Record<any, any>>({
+  key: `${COMPONENT_NAME}/mapObjectAtom`,
+  default: {},
+});
+
+export const ListPosition = atom({
+  key: `${COMPONENT_NAME}/ListPosition`,
+  default: '400px',
+});
+
+export const CurrentIndex = atom({
+  key: `${COMPONENT_NAME}/CurrentIndex`,
+  default: 0,
+});
+
 export const CartTray = atom({
   key: `${COMPONENT_NAME}/CartTray`,
+  default: false,
+});
+
+export const Loading = atom({
+  key: `${COMPONENT_NAME}/Loading`,
   default: false,
 });
 
