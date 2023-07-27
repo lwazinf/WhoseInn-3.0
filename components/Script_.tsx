@@ -68,6 +68,7 @@ const Script_ = ({ docData_, docLock_ }: Script_Props) => {
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [quoteLoadingError, setQuoteLoadingError] = useState(false);
 
+                    // @ts-ignore
   function base64ToFile(base64DataUrl, fileName) {
     const byteString = atob(base64DataUrl.split(",")[1]); // Remove the data:image/jpeg;base64 part
     const ab = new ArrayBuffer(byteString.length);
