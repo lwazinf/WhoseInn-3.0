@@ -16,6 +16,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
     const selectedFile = e.target.files;
     setImages_(selectedFile);
   };
+                    // @ts-ignore
   function base64ToFile(base64DataUrl, fileName) {
     const byteString = atob(base64DataUrl.split(',')[1]); // Remove the data:image/jpeg;base64 part
     const ab = new ArrayBuffer(byteString.length);
@@ -55,6 +56,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
           ) : (
             <img
             src={`${
+                    // @ts-ignore
               data___ != 'https://via.placeholder.com/500' ? URL.createObjectURL(base64ToFile(data_, "image.jpg")) : data___
             }`}
               className={`w-full h-[350px] object-cover rounded-[3px] opacity-90 cursor-pointer`}
@@ -99,6 +101,7 @@ const Image_ = ({ uuid_, docLock_, docData_ }: Image_Props) => {
                     // @ts-ignore
                     setSO_(newArray); 
                   });
+                    // @ts-ignore
                   console.log(data_.target.files[0])
                 }
               }}
