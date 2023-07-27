@@ -241,6 +241,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
                     edit={false}
                     headings={false}
                     H1={obj_.H1}
+                    // @ts-ignore
                     H2={obj_.H2}
                     P1={obj_.P1}
                     P2={obj_.P2}
@@ -269,7 +270,9 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
               <div
                 className={`w-full h-[100px] flex flex-row justify-between items-center`}
               >
-                {data.attachments?.map((obj__) => {
+                {
+                    // @ts-ignore
+                    data.attachments?.map((obj__) => {
                   return (
                     <div
                       className={`flex flex-row justify-center items-center rounded-[3px] h-full w-[178px] mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
@@ -292,7 +295,9 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
               // setAddOn_(true);
             }}
           >
-            {data.content?.map((obj_) => {
+            {
+                    // @ts-ignore
+                    data.content?.map((obj_) => {
               return <NoteCell_ data={data} obj={obj_} gptSpin={gptSpin} />;
             })}
           </div>
@@ -329,6 +334,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
                 // if (!loading_) {
                 //   handleSubmit(prompt_);
                 // }
+                    // @ts-ignore
                 console.log(session?.user.name);
               }}
             >
@@ -426,6 +432,7 @@ const Lead_ = ({ data }: Lead_Props) => {
             {data.name
               ?.toUpperCase()
               .split(" ")
+                    // @ts-ignore
               .map((obj_) => {
                 return obj_[0];
               })
@@ -791,6 +798,7 @@ const NoteCell_ = ({ obj, data, gptSpin }: NoteCell_Props) => {
             icon={faTrash}
             className={`h-[13px] w-[13px] ml-2 mt-1 text-red-600/50 hover:text-red-600 cursor-pointer transition-all duration-[400ms]`}
             onClick={() => {
+                    // @ts-ignore
               data.content = data.content.filter((obj_) => {
                 return obj_.uid != obj.uid;
               });
