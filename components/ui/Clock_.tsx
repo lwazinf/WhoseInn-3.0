@@ -35,6 +35,7 @@ const Clock_: React.FC = () => {
 
       if (session) {
         // User is logged in, handle the session data
+                    // @ts-ignore
         setName_(session.user.name); // Access the user object from the session and set the name
       } else {
         // User is not logged in
