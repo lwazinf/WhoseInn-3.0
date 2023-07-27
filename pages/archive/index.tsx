@@ -110,7 +110,6 @@ const Home: NextPage = () => {
           <div
             className={`rounded-[4px] shadow-md w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer text-white transition-all duration-500 bg-red-600 mt-4 mb-[-10px] ml-auto`}
             onClick={() => {
-              
               console.log(mapObject);
             }}
           >
@@ -219,7 +218,7 @@ const CreateLead_ = ({}: CreateLead_Props) => {
     >
       <QRCode
         className={`w-[92px] h-[92px] rounded-[4px] mix-blend-multiply transition-all duration-500 absolute top-1 left-1 opacity-90`}
-        value={mapObject["Company Name"] ? mapObject["Company Name"] : ""}
+        value={mapObject["name"] ? mapObject["name"] : ""}
         onClick={() => {
           // console.log(element)
         }}
@@ -273,11 +272,11 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
     index: number
   ) => {
     const fieldName = placeholders[index].toLowerCase().replace(" ", "");
-    // setInputs((prevInputs) => {
-    //   const updatedInputs = [...prevInputs];
-    //   updatedInputs[index] = e.target.value;
-    //   return updatedInputs;
-    // });
+    setInputs((prevInputs) => {
+      const updatedInputs = [...prevInputs];
+      updatedInputs[index] = e.target.value;
+      return updatedInputs;
+    });
 
     setMapObject((prevMapObject) => {
       const updatedData = {
@@ -292,11 +291,14 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
 
     // Check if arrow keys (left or right) were pressed
     if (
+      // @ts-ignore
       e.nativeEvent.code === "ArrowLeft" ||
+      // @ts-ignore
       e.nativeEvent.code === "ArrowRight"
     ) {
       e.preventDefault();
 
+      // @ts-ignore
       if (e.nativeEvent.code === "ArrowLeft") {
         const previousIndex = currentIndex - 1;
         if (previousIndex >= 0) {
@@ -308,6 +310,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
             element.focus();
           }
         }
+      // @ts-ignore
       } else if (e.nativeEvent.code === "ArrowRight") {
         const nextIndex = currentIndex + 1;
         if (nextIndex < placeholders.length) {
@@ -323,41 +326,41 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
     }
   };
 
-  const handleEnterKey = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.shiftKey) {
-      // Handle the case when both Enter and Shift keys are pressed together
-      const previousIndex = currentIndex - 1;
-      if (previousIndex >= 0) {
-        setCurrentIndex(previousIndex);
-        const element = document.getElementById(
-          placeholders[previousIndex].replace(" ", "")
-        );
-        if (element) {
-          element.focus();
-        }
-      }
-    } else if (e.key === "Enter") {
-      const nextIndex = currentIndex + 1;
-      if (nextIndex < placeholders.length) {
-        setCurrentIndex(nextIndex);
-        const element = document.getElementById(
-          placeholders[nextIndex].replace(" ", "")
-        );
-        if (element) {
-          element.focus();
-        }
-      } else {
-        // Reached the end of the list
-        // Perform any necessary actions or handle the end state
-      }
-    }
-  };
+  // const handleEnterKey = (
+  //   e: React.KeyboardEvent<HTMLInputElement>,
+  //   index: number
+  // ) => {
+  //   if (e.shiftKey) {
+  //     // Handle the case when both Enter and Shift keys are pressed together
+  //     const previousIndex = currentIndex - 1;
+  //     if (previousIndex >= 0) {
+  //       setCurrentIndex(previousIndex);
+  //       const element = document.getElementById(
+  //         placeholders[previousIndex].replace(" ", "")
+  //       );
+  //       if (element) {
+  //         element.focus();
+  //       }
+  //     }
+  //   } else if (e.key === "Enter") {
+  //     const nextIndex = currentIndex + 1;
+  //     if (nextIndex < placeholders.length) {
+  //       setCurrentIndex(nextIndex);
+  //       const element = document.getElementById(
+  //         placeholders[nextIndex].replace(" ", "")
+  //       );
+  //       if (element) {
+  //         element.focus();
+  //       }
+  //     } else {
+  //       // Reached the end of the list
+  //       // Perform any necessary actions or handle the end state
+  //     }
+  //   }
+  // };
 
   return (
-    <div className="flex flex-col justify-center items-start w-full">
+    <div className="flex flex-col justify-center items-start w-full relative">
       <div
         className={`min-w-0 min-h-0 flex flex-col justify-center items-center absolute right-[-35px]`}
       >
@@ -368,6 +371,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
             const nextIndex = currentIndex + 1;
             if (nextIndex < placeholders.length - 1) {
               setCurrentDisplay(
+      // @ts-ignore
                 placeholders_[placeholders[nextIndex].toLowerCase()]
               );
             }
@@ -395,6 +399,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
 
             if (currentIndex != 0) {
               setCurrentDisplay(
+      // @ts-ignore
                 placeholders_[placeholders[previousIndex].toLowerCase()]
               );
             }
@@ -411,38 +416,39 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
         />
       </div>
       <div
-        className={`flex flex-col justify-center items-center min-w-full ml-auto max-h-[100px]`}
+        className={`flex flex-col justify-center items-center min-w-full ml-auto max-h-[100px] relative overflow-scroll`}
       >
         <div
           className={`flex flex-col justify-center items-center w-full relative top-[${currentDisplay}] transition-all duration-500 min-h-[100px]`}
         >
           {placeholders.map((placeholder, index) => {
-  const isCurrentIndex = index === currentIndex;
-  return (
-    <div
-      className={`flex flex-col justify-center items-center min-h-[100px]`}
-      style={{ opacity: isCurrentIndex ? 1 : 0.5 }}
-    >
-      <input
-        ref={(ref) => {
-          inputRefs.current[index] = ref;
-          if (isCurrentIndex && ref) {
-            ref.focus();
-          }
-        }}
-        type="text"
-        placeholder={placeholder}
-        // value={}
-        key={index}
-        onChange={(e) => {
-          handleInputChange(e, index);
-        }}
-        onKeyPress={(e) => handleEnterKey(e, index)}
-        className={`_inter text-center w-full text-black/90 font-black text-[18px]`}
-      />
-    </div>
-  );
-})}
+            const isCurrentIndex = index === currentIndex;
+            return (
+              <div
+                className={`flex flex-col justify-center items-center min-h-[100px] absolute ${index === currentIndex ? 'pointer-events-auto' : 'pointer-events-none' }`}
+              >
+                <input
+                style={{ opacity: index === currentIndex ? 1 : 0 }} // Set opacity based on currentIndex
+                  ref={(ref) => {
+                    // @ts-ignore
+                    inputRefs.current[index] = ref;
+                    if (isCurrentIndex && ref) {
+                      ref.focus();
+                    }
+                  }}
+                  type="text"
+                  placeholder={placeholder}
+                  // value={}
+                  key={index}
+                  onChange={(e) => {
+                    handleInputChange(e, index);
+                  }}
+                  // onKeyPress={(e) => handleEnterKey(e, index)}
+                  className={`_inter text-center w-full text-black/90 font-black text-[18px]`}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { getLead } from "../../Firebase";
 import { useEffect, useState } from "react";
-import Script_ from "../../components/pages/Script_";
 import Archive_ from "../../components/Archive_";
 import SideMenu_ from "../../components/SideMenu_";
 
@@ -32,10 +31,11 @@ const NarrateDetailDetail_ = ({}: NarrateDetailDetail_Props) => {
 
   return (
     <div className={``}>
+      {/* @ts-ignore */}
       <title>{data_.name+" :: "+data_.author}</title>
-      {router.query.leadid != null && (
+      {/* {router.query.leadid != null && (
         
-      )}
+      )} */}
     </div>
   );
 };

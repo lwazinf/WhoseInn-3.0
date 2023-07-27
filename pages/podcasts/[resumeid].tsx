@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { getResume } from "../../Firebase";
 import { useEffect, useState } from "react";
-import Script_ from "../../components/pages/Script_";
 
 interface ResumeDetail_Props {}
 
@@ -30,9 +29,8 @@ const ResumeDetail_ = ({}: ResumeDetail_Props) => {
   return (
     <div className={``}>
       <title>{router.query.resumeid}</title>
-      {router.query.resumeid != null && (
-        <Script_ docLock_={true} docData_={data_} />
-      )}
+      {/* {router.query.resumeid != null && (
+      )} */}
     </div>
   );
 };
