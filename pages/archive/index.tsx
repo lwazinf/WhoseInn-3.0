@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import React, { useRef } from "react";
 import QRCode from "react-qr-code";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { v4 } from "uuid";
 import {
   faAdd,
   faAngleLeft,
@@ -19,6 +20,8 @@ import {
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { db } from "../../Firebase";
 
 const placeholders_ = {
   name: "400px",
@@ -50,12 +53,18 @@ const Home: NextPage = () => {
   const { data: session, status } = useSession();
   const currentUser_name = session?.user?.name;
 
+  const uploadData_ = async () => {
+    await setDoc(doc(db, "leads", mapObject.uid), mapObject).then(() => {
+      console.log('Document uploaded!')
+    });
+  };
+
   useEffect(() => {
     setMapObject({
       prepared: false,
-      uid: "",
-      created: "",
-      author: "",
+      uid: v4(),
+      created: serverTimestamp(),
+      author: currentUser_name,
       data: {
         name: "",
         email: "",
@@ -87,13 +96,13 @@ const Home: NextPage = () => {
 
       <main className="flex w-full pl-[100px] min-h-screen flex-col items-center justify-center text-center relative overflow-scroll">
         {session?.user?.name && (
-          <p
+          <div
             className={`mt-8 mb-4 ${
               session?.user?.name ? "opacity-100" : "opacity-0"
             } duration-500 transition-all font-medium text-[14px] italic text-black/50 flex flex-row`}
           >
             Currently editing as{" "}
-            <p className={`text-red-600 ml-1`}>
+            <div className={`text-red-600 ml-1`}>
               <div
                 onClick={() => {
                   console.log(mapObject);
@@ -101,16 +110,17 @@ const Home: NextPage = () => {
               >
                 {currentUser_name}
               </div>
-            </p>
+            </div>
             ..
-          </p>
+          </div>
         )}
         <CreateLead_ />
         <div className={`w-[300px] flex flex-col justify-center items-center`}>
           <div
             className={`rounded-[4px] shadow-md w-[80px] h-[30px] flex flex-col justify-center items-center text-[13px] cursor-pointer text-white transition-all duration-500 bg-red-600 mt-4 mb-[-10px] ml-auto`}
             onClick={() => {
-              console.log(mapObject);
+              // console.log(mapObject);
+              uploadData_();
             }}
           >
             Process
@@ -310,7 +320,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
             element.focus();
           }
         }
-      // @ts-ignore
+        // @ts-ignore
       } else if (e.nativeEvent.code === "ArrowRight") {
         const nextIndex = currentIndex + 1;
         if (nextIndex < placeholders.length) {
@@ -371,7 +381,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
             const nextIndex = currentIndex + 1;
             if (nextIndex < placeholders.length - 1) {
               setCurrentDisplay(
-      // @ts-ignore
+                // @ts-ignore
                 placeholders_[placeholders[nextIndex].toLowerCase()]
               );
             }
@@ -399,7 +409,7 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
 
             if (currentIndex != 0) {
               setCurrentDisplay(
-      // @ts-ignore
+                // @ts-ignore
                 placeholders_[placeholders[previousIndex].toLowerCase()]
               );
             }
@@ -425,10 +435,15 @@ const SequentialQuestionnaire = ({}: SequentialQuestionnaireprops) => {
             const isCurrentIndex = index === currentIndex;
             return (
               <div
-                className={`flex flex-col justify-center items-center min-h-[100px] absolute ${index === currentIndex ? 'pointer-events-auto' : 'pointer-events-none' }`}
+                className={`flex flex-col justify-center items-center min-h-[100px] absolute ${
+                  index === currentIndex
+                    ? "pointer-events-auto"
+                    : "pointer-events-none"
+                }`}
+                key={index}
               >
                 <input
-                style={{ opacity: index === currentIndex ? 1 : 0 }} // Set opacity based on currentIndex
+                  style={{ opacity: index === currentIndex ? 1 : 0 }} // Set opacity based on currentIndex
                   ref={(ref) => {
                     // @ts-ignore
                     inputRefs.current[index] = ref;

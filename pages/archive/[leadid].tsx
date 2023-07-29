@@ -31,7 +31,7 @@ const LeadDetail_ = ({}: LeadDetail_Props) => {
   return (
     <div className={``}>
       {/* @ts-ignore */}
-      <title>{data_.name+" :: "+data_.author}</title>
+      <title>{data_.data?.name+" :: "+data_.author}</title>
       {router.query.leadid != null && (
         <Archive_ data={data_} gptSpin={prePrompt_} />
       )}

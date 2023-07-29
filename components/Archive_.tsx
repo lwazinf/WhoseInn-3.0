@@ -5,7 +5,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../Firebase";
 import QRCode from "react-qr-code";
 import { doc, updateDoc } from "firebase/firestore";
@@ -24,6 +24,10 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
   const [prompt_, setPrompt_] = useState("");
   const [loading_, setLoading_] = useRecoilState(Loading);
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    console.log(data)
+  }, [])
 
   const router = useRouter();
   const reloadPage = () => {
@@ -56,7 +60,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
           "/api/chatGPT?prompt=" +
             encodeURIComponent(
               `${
-                (data.name, data.category, data.locations)
+                (data.data?.name, data.data?.category, data.data?.locations, data.data?.overview)
               } write a short cold email script, selling a website`
             )
         );
@@ -64,15 +68,15 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
           "/api/chatGPT?prompt=" +
             encodeURIComponent(
               `${
-                (data.name, data.category, data.locations)
-              } write a short overview on this business as a construction lead`
+                (data.data?.name, data.data?.category, data.data?.locations, data.data?.overview)
+              } write a short overview on this business as a lead`
             )
         );
         const callScript = await fetch(
           "/api/chatGPT?prompt=" +
             encodeURIComponent(
               `${
-                (data.name, data.category, data.locations)
+                (data.data?.name, data.data?.category, data.data?.locations, data.data?.overview)
               } write a short cold call script, selling a website`
             )
         );
@@ -80,9 +84,9 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
         const callBody = await callScript.json();
         const emailBody = await emailScript.json();
 
-        data.overview1 = overviewBody.quote;
-        data.cold_email = emailBody.quote;
-        data.cold_call = callBody.quote;
+        data.generated.overview = overviewBody.quote;
+        data.generated.cold_email = emailBody.quote;
+        data.generated.cold_call = callBody.quote;
         data.prepared = true;
 
         update_(data);
@@ -128,6 +132,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
             },
           ],
         ];
+        // console.log(data);
         update_(data);
       } catch (error) {
         setLoading_(false);
@@ -144,55 +149,52 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
       type: "twoCell",
       H1: "Company Name",
       H2: "Email",
-      P1: data.name,
-      P2: data.email,
+      P1: data.data?.name,
+      P2: data.data?.email,
     },
     {
       type: "twoCell",
       H1: "Website",
       H2: "Number",
-      P1: "https://" + data.website,
-      P2: data.phone,
+      P1: "https://" + data.data?.website,
+      P2: data.data?.number,
     },
     {
       type: "twoCell",
       H1: "Category",
       H2: "Locations",
-      P1: data.category?.charAt(0).toUpperCase() + data.category?.slice(1),
-      P2: data.locations?.join(", "),
+      P1: data.data?.category?.charAt(0).toUpperCase() + data.data?.category?.slice(1),
+      P2: data.data?.locations,
     },
     {
       type: "twoCell",
       H1: "Industry",
       H2: "Type",
-      P1: data.industry?.charAt(0).toUpperCase() + data.industry?.slice(1),
-      P2: data.type?.charAt(0).toUpperCase() + data.type?.slice(1),
+      P1: data.data?.industry?.charAt(0).toUpperCase() + data.data?.industry?.slice(1),
+      P2: data.data?.type?.charAt(0).toUpperCase() + data.data?.type?.slice(1),
     },
     {
       type: "OneCell",
       H1: "Overview (Supervisor)",
-      P1: data.overview0,
+      P1: data.data?.overview,
     },
     {
       type: "OneCell",
       H1: "Overview (AI)",
-      P1: data.overview1,
+      P1: data.generated?.overview,
     },
     {
       type: "OneCell",
       H1: "Cold Call Script",
-      P1: data.cold_call,
+      P1: data.generated?.cold_call,
     },
     {
       type: "OneCell",
       H1: "Email Script",
-      P1: data.cold_email,
+      P1: data.generated?.cold_email,
     },
   ];
 
-  // useEffect(() => {
-  //   processDoc()
-  // }, [])
   return (
     <div
       className={`min-w-[800px] min-h-2 flex flex-row justify-center items-start relative mb-12 mx-auto`}
@@ -210,8 +212,8 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
               data ? "opacity-100" : "opacity-0"
             }`}
           >
-            {[1].map((obj_) => {
-              return <Lead_ data={data} />;
+            {[1].map((obj_, index) => {
+              return <Lead_ data={data} key={index} />;
             })}
           </div>
           <div
@@ -230,11 +232,11 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
               {data && (
                 <QRCode
                   className={`w-[185px] h-[185px] absolute top-6 left-8 mix-blend-multiply`}
-                  value={"http://ofscript.ai/archive/" + data.uid}
+                  value={"http://ofscript.ai/archive/" + data.data?.uid}
                 />
               )}
             </div>
-            {defaultData.map((obj_) => {
+            {defaultData.map((obj_, index) => {
               if (obj_.type == "twoCell") {
                 return (
                   <TwoCell_
@@ -246,6 +248,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
                     P1={obj_.P1}
                     P2={obj_.P2}
                     width_={`w-[68%]`}
+                    key={index}
                   />
                 );
               } else {
@@ -255,6 +258,7 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
                     headings={false}
                     H1={obj_.H1}
                     P1={obj_.P1}
+                    key={index}
                   />
                 );
               }
@@ -272,11 +276,11 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
               >
                 {
                     // @ts-ignore
-                    data.attachments?.map((obj__) => {
+                    data.attachments?.map((obj__, index) => {
                   return (
                     <div
                       className={`flex flex-row justify-center items-center rounded-[3px] h-full w-[178px] mx-1 bg-black/20 hover:bg-black/80 transition-all duration-200 cursor-pointer`}
-                      key={obj__}
+                      key={index}
                     />
                   );
                 })}
@@ -297,8 +301,8 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
           >
             {
                     // @ts-ignore
-                    data.content?.map((obj_) => {
-              return <NoteCell_ data={data} obj={obj_} gptSpin={gptSpin} />;
+                    data.content?.map((obj_, index) => {
+              return <NoteCell_ data={data} obj={obj_} gptSpin={gptSpin} key={index} />;
             })}
           </div>
           <div
@@ -331,11 +335,11 @@ const Archive_ = ({ data, gptSpin }: Archive_Props) => {
                 loading_ && "animate-pulse"
               }`}
               onClick={() => {
-                // if (!loading_) {
-                //   handleSubmit(prompt_);
-                // }
+                if (!loading_) {
+                  handleSubmit(prompt_);
+                }
                     // @ts-ignore
-                console.log(session?.user.name);
+                // console.log(session?.user.name);
               }}
             >
               {loading_ ? "Hold Up" : "Process"}
@@ -586,7 +590,7 @@ const Lead_ = ({ data }: Lead_Props) => {
       <div
         className={`absolute right-[50px] h-full w-[40px] flex flex-col justify-center items-center opacity-70`}
       >
-        <p
+        <div
           className={`text-[13px] text-black/60 -rotate-90 w-[180px] text-center relative right-[30px]`}
         >
           <p className={`font-black text-[37px] text-black/80 relative top-2`}>
@@ -599,7 +603,7 @@ const Lead_ = ({ data }: Lead_Props) => {
           >
             {data.author?.toUpperCase()}
           </p>
-        </p>
+        </div>
       </div>
       {/* <div
             className={`absolute bottom-[-40px] w-full h-[40px] flex flex-col text-right text-[13px] opacity-50 justify-center items-center`}
@@ -770,53 +774,54 @@ interface NoteCell_Props {
   gptSpin: string;
 }
 
-const NoteCell_ = ({ obj, data, gptSpin }: NoteCell_Props) => {
-  const update_ = async (dataUpdate: any) => {
+// @ts-ignore
+const NoteCell_ = ({ obj, data, gptSpin }) => {
+  const router = useRouter();
+  const reloadPage = () => {
+    router.reload();
+  };
+  // @ts-ignore
+  const update_ = async (dataUpdate) => {
     const documentRef = doc(db, "leads", data.uid);
     try {
       await updateDoc(documentRef, dataUpdate);
-      console.log("Document successfully updated!");
+      // console.log("Document successfully updated!");
+      reloadPage()
     } catch (error) {
       console.error("Error updating document: ", error);
     }
   };
   return (
-    <div
-      className={`w-full min-h-[50px] flex flex-row justify-center items-center my-2`}
-    >
-      <div
-        className={`w-full h-full flex flex-col justify-center items-start px-8`}
-      >
-        <p
-          className={`_Inter w-full flex flex-row text-[13px] italic text-black mb-2 ml-[0px]`}
-        >
+    <div className="w-full min-h-[50px] flex flex-row justify-center items-center my-2">
+      <div className="w-full h-full flex flex-col justify-center items-start px-8">
+        <div className="_Inter w-full flex flex-row text-[13px] italic text-black mb-2 ml-[0px]">
           {obj.H0?.slice(0, 22)}{" "}
-          <p className={`_Inter text-[13px] italic text-black/50 ml-1`}>
+          <p className="_Inter text-[13px] italic text-black/50 ml-1">
             - {obj.author}
           </p>
           <FontAwesomeIcon
             icon={faTrash}
-            className={`h-[13px] w-[13px] ml-2 mt-1 text-red-600/50 hover:text-red-600 cursor-pointer transition-all duration-[400ms]`}
+            className="h-[13px] w-[13px] ml-2 mt-1 text-red-600/50 hover:text-red-600 cursor-pointer transition-all duration-[400ms]"
             onClick={() => {
-                    // @ts-ignore
+              // @ts-ignore
               data.content = data.content.filter((obj_) => {
-                return obj_.uid != obj.uid;
+                return obj_.uid !== obj.uid;
               });
               update_(data);
             }}
           />
-        </p>
-        <p className={`_Inter text-[14px] text-black font-black`}>
+        </div>
+        <p className="_Inter text-[14px] text-black font-black">
           <FontAwesomeIcon
             icon={faUser}
-            className={`h-[15px] w-[15px] mr-2 text-black/50 transition-all duration-[400ms]`}
+            className="h-[15px] w-[15px] mr-2 text-black/50 transition-all duration-[400ms]"
           />{" "}
           {obj.H1}
         </p>
-        <p className={`_Inter text-[13px] text-black/50 text-left`}>
+        <p className="_Inter text-[13px] text-black/50 text-left">
           <FontAwesomeIcon
             icon={faRobot}
-            className={`h-[15px] w-[15px] mr-2 text-black/50 transition-all duration-[400ms]`}
+            className="h-[15px] w-[15px] mr-2 text-black/50 transition-all duration-[400ms]"
           />{" "}
           {obj.P1}
         </p>
@@ -824,3 +829,4 @@ const NoteCell_ = ({ obj, data, gptSpin }: NoteCell_Props) => {
     </div>
   );
 };
+

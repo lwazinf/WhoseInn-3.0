@@ -16,7 +16,7 @@ const SignIn: NextPage = (props): JSX.Element => {
       redirect: false,
     });
 
-    console.log(res);
+    // console.log(res);
   };
   return (
     <div className="sign-in-form">
@@ -56,8 +56,7 @@ const CenterStage_ = ({}: CenterStage_Props) => {
     <div
       className={`w-full h-screen flex flex-col justify-center items-center relative mb-12`}
     >
-      {/* <SignIn/> */}
-      
+      {/* <SignIn/>       */}
     </div>
   );
 };
