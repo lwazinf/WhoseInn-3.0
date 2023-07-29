@@ -38,7 +38,9 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     jwt(params) {
       // update token
+      // @ts-ignore
       if (params.user?.role) {
+        // @ts-ignore
         params.token.role = params.user.role;
       }
       // return final_token
